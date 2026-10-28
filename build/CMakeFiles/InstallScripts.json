@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/solo/Projects/SoloPhysics/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
