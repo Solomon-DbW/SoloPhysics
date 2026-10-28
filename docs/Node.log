@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (TeX Live 2026/Arch Linux)  (format=lualatex 2026.10.28)  28 OCT 2026 20:11
+This is LuaHBTeX, Version 1.24.0 (TeX Live 2026/Arch Linux)  (format=lualatex 2026.10.28)  28 OCT 2026 20:22
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/solo/Projects/SoloPhysics/docs/Node
@@ -453,7 +453,7 @@ Inserting `Babel.unset_atdir' in `hpack_filter'. (/usr/share/texmf-dist/tex/cont
 \c@lstlisting=\count324
  [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Node.aux)
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] (./Node.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -461,19 +461,19 @@ L3 programming layer <2026-01-19>
 )
 
 Here is how much of LuaTeX's memory you used:
- 8230 strings out of 476076
+ 8238 strings out of 476076
  100000,953878 words of node,token memory allocated
- 564 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 38 attribute, 52 glue_spec, 14 attribute_list, 1 write nodes
-   avail lists: 2:3762,3:44,4:32,5:640,6:14,7:1684,8:14,9:1292,10:19,11:120
- 30585 multiletter control sequences out of 65536+600000
+ 692 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 86 attribute, 52 glue_spec, 30 attribute_list, 1 write nodes
+   avail lists: 2:8517,3:127,4:32,5:723,6:44,7:4154,8:19,9:1438,10:19,11:251
+ 30593 multiletter control sequences out of 65536+600000
  48 fonts using 11902807 bytes
- 73i,6n,98p,473b,698s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 73i,7n,98p,473b,698s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/opentype/public/lm/lmmono10-regular.otf></usr/share/texmf-dist/fonts/truetype/google/noto/NotoSans-Regular.ttf></usr/share/texmf-dist/fonts/truetype/google/noto/NotoSans-Bold.ttf></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on Node.pdf (1 page, 78621 bytes).
+Output written on Node.pdf (2 pages, 88677 bytes).
 
-PDF statistics: 57 PDF objects out of 1000 (max. 8388607)
- 37 compressed objects within 1 object stream
+PDF statistics: 60 PDF objects out of 1000 (max. 8388607)
+ 39 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 1048576)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 
