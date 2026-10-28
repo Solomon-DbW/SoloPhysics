@@ -1,0 +1,70 @@
+% !TeX program = lualatex
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[english, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{english}
+\babelfont{rm}{Noto Sans}
+
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinestyle{cppstyle}{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!40!black},
+    stringstyle=\color{orange},
+    breaklines=true,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    showstringspaces=false
+}
+\lstset{style=cppstyle}
+
+\title{Node Physics Functions}
+\author{Solomon}
+
+\definecolor{textorange}{HTML}{FFFFFF}
+\definecolor{darkbg}{HTML}{000000}
+
+\pagecolor{darkbg}
+\color{textorange}
+
+\begin{document}
+
+\paragraph{Velocity using the previous position of the node:}
+
+\begin{equation*}
+\mathbf{v} \approx \frac{\mathbf{x}_t - \mathbf{x}_{t - \Delta t}}{\Delta t}
+\end{equation*}
+
+\noindent Here, $\mathbf{x}_t$ is the current position and $\mathbf{x}_{t - \Delta t}$ is the previous position.
+
+\paragraph{Calculate the distance between two nodes:} 
+
+\noindent Suppose the nodes have positions \(\mathbf{x}_A\) and \(\mathbf{x}_B\).
+\noindent The vector from A to B is:
+\[
+\mathbf{d}=\mathbf{x}_B-\mathbf{x}_A
+\]
+
+\noindent The distance between them is the magnitude of that vector:
+\[
+L=\|\mathbf{d}\|
+=\sqrt{d_x^2+d_y^2+d_z^2}
+\]
+
+\noindent In GLM, it can be calculated with:
+
+\begin{lstlisting}
+glm::vec3 delta = nodeB.position - nodeA.position;
+float length = glm::length(delta);
+\end{lstlisting}
+
+
+
+\end{document}

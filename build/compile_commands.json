@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/solo/Projects/SoloPhysics/build",
+  "command": "/usr/bin/g++ -I/home/solo/Projects/SoloPhysics/include -g -std=c++20 -Wall -Wextra -Wpedantic -o CMakeFiles/solo_physics.dir/src/main.cpp.o -c /home/solo/Projects/SoloPhysics/src/main.cpp",
+  "file": "/home/solo/Projects/SoloPhysics/src/main.cpp",
+  "output": "/home/solo/Projects/SoloPhysics/build/CMakeFiles/solo_physics.dir/src/main.cpp.o"
+}
+]
