@@ -1,12 +1,10 @@
-// include/solophysics/Node.hpp
 #pragma once
-
 #include <solophysics/Vector3D.hpp>
 
 namespace solophysics {
 
 struct Node {
-    Vector3D position{0.0f, 0.0f, 0.0f};
+    Vector3D position{0.0f};
     Vector3D velocity{0.0f};
     Vector3D force{0.0f};
 
