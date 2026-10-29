@@ -6,7 +6,7 @@
 namespace solophysics {
 
 struct Node {
-    Vector3D position{0.0f, 0.5f, 0.2f};
+    Vector3D position{0.0f, 0.0f, 0.0f};
     Vector3D velocity{0.0f};
     Vector3D force{0.0f};
 
