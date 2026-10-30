@@ -1,59 +1,101 @@
 
-#include <iostream>
 #include <solophysics/PhysicsWorld.hpp>
+#include <solophysics/Renderer.hpp>
+
+#include <GLFW/glfw3.h>
+
+#include <algorithm>
+#include <iostream>
+#include <exception>
 
 int main() {
-    solophysics::PhysicsWorld world;
+    try {
+        using namespace solophysics;
 
-    // Fixed node at 3 metres
-    solophysics::Node anchor;
-    anchor.position = {0.0f, 3.0f, 0.0f};
-    anchor.fixed = true;
+        PhysicsWorld world;
 
-    // Movable node at 2 metres
-    solophysics::Node mass;
-    mass.position = {0.0f, 2.0f, 0.0f};
-    mass.mass = 1.0f;
+        world.groundY = 0.0f;
+        world.restitution = 0.2f;
+        world.friction = 0.4f;
 
-    // Add both nodes
-    auto a = world.addNode(anchor);
-    auto b = world.addNode(mass);
+        // Create the square
+        Node topLeft;
+        topLeft.position = {-0.5f, 3.0f, 0.0f};
 
-    // Connect them with a spring
-    world.addBeam(a, b, 100.0f, 0.6f);
+        Node topRight;
+        topRight.position = {0.5f, 3.0f, 0.0f};
 
-    // Disable plastic deformation
-    world.beams[0].plasticDeformationEnabled = false;
+        Node bottomLeft;
+        bottomLeft.position = {-0.5f, 2.0f, 0.0f};
 
-    // Disable beam breaking during testing
-    world.beams[0].breakStrain = 100.0f;
+        Node bottomRight;
+        bottomRight.position = {0.5f, 2.0f, 0.0f};
 
-    std::cout
-        << "Spring stiffness: " << world.beams[0].stiffness
-        << "\nSpring damping: " << world.beams[0].damping
-        << "\nPlasticity enabled: "
-        << world.beams[0].plasticDeformationEnabled
-        << '\n';
+        auto n0 = world.addNode(topLeft);
+        auto n1 = world.addNode(topRight);
+        auto n2 = world.addNode(bottomLeft);
+        auto n3 = world.addNode(bottomRight);
 
-    constexpr float dt = 1.0f / 120.0f;
+        constexpr float stiffness = 1000.0f;
+        constexpr float damping = 10.0f;
 
-    // Simulate five seconds
-    for (int i = 0; i < 600; ++i) {
-        world.step(dt);
+        // Edges
+        world.addBeam(n0, n1, stiffness, damping);
+        world.addBeam(n1, n3, stiffness, damping);
+        world.addBeam(n3, n2, stiffness, damping);
+        world.addBeam(n2, n0, stiffness, damping);
 
-        // Print every 30 physics steps
-        if (i % 30 == 0) {
-            const auto& node = world.nodes[b];
+        // Diagonal braces
+        world.addBeam(n0, n3, stiffness, damping);
+        world.addBeam(n1, n2, stiffness, damping);
 
-            std::cout
-                << "Time: " << (i + 1) * dt
-                << " | Height: " << node.position.y
-                << " | Velocity: " << node.velocity.y
-                << " | Rest length: " << world.beams[0].restLength
-                << " | Broken: " << world.beams[0].broken
-                << '\n';
+        // Elastic-only test
+        for (Beam& beam : world.beams) {
+            beam.plasticDeformationEnabled = false;
+            beam.breakStrain = 100.0f;
         }
-    }
 
-    return 0;
+        Renderer renderer(1000, 700);
+
+        constexpr double fixedDt = 1.0 / 240.0;
+
+        double previousTime = glfwGetTime();
+        double accumulator = 0.0;
+
+        while (!renderer.shouldClose()) {
+            renderer.pollEvents();
+
+            double currentTime = glfwGetTime();
+            double frameTime = currentTime - previousTime;
+            previousTime = currentTime;
+
+            // Prevent a large physics jump after a pause
+            frameTime = std::clamp(
+                frameTime, 0.0, 0.1
+            );
+
+            accumulator += frameTime;
+
+            // Fixed timestep physics
+            while (accumulator >= fixedDt) {
+                world.step(
+                    static_cast<float>(fixedDt)
+                );
+
+                accumulator -= fixedDt;
+            }
+
+            renderer.render(world);
+        }
+
+        return 0;
+
+    } catch (const std::exception& e) {
+        std::cerr
+            << "SoloPhysics error: "
+            << e.what()
+            << '\n';
+
+        return 1;
+    }
 }

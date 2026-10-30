@@ -10,7 +10,7 @@
 		],
 		"files" : 
 		[
-			"/usr/lib/cmake/glm/glmConfig.cmake",
+			"/usr/share/cmake/Modules/FindOpenGL.cmake",
 			"CMakeLists.txt"
 		],
 		"nodes" : 
@@ -21,7 +21,7 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 8,
+				"line" : 11,
 				"parent" : 0
 			},
 			{
@@ -31,7 +31,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 53,
+				"line" : 715,
 				"parent" : 2
 			}
 		]
@@ -41,15 +41,15 @@
 		"major" : 2,
 		"minor" : 11
 	},
-	"id" : "glm::glm-header-only::@6890427a1f51a3e7e1df",
+	"id" : "OpenGL::OpenGL::@6890427a1f51a3e7e1df",
 	"imported" : true,
 	"local" : true,
-	"name" : "glm::glm-header-only",
+	"name" : "OpenGL::OpenGL",
 	"paths" : 
 	{
 		"build" : ".",
 		"source" : "."
 	},
 	"sources" : [],
-	"type" : "INTERFACE_LIBRARY"
+	"type" : "UNKNOWN_LIBRARY"
 }

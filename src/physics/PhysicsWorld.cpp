@@ -78,27 +78,38 @@ void PhysicsWorld::integrate(float dt) {
     }
 }
 
+
     void PhysicsWorld::detectAndResolveGroundContacts() {
+        constexpr float restingVelocityThreshold = 0.2f;
+
         for (Node& node : nodes) {
             if (node.fixed) {
                 continue;
             }
 
             if (node.position.y < groundY) {
-                // Correct ground penetration
+                // Move the node back onto the ground
                 node.position.y = groundY;
 
-                // Resolve downward impact velocity
                 if (node.velocity.y < 0.0f) {
-                    node.velocity.y *= -restitution;
+                    float impactSpeed = -node.velocity.y;
+
+                    if (impactSpeed < restingVelocityThreshold) {
+                        // Small impacts: treat as resting contact
+                        node.velocity.y = 0.0f;
+                    } else {
+                        // Larger impacts: apply restitution
+                        node.velocity.y *= -restitution;
+                    }
                 }
 
-                // Simplified tangential velocity reduction
+                // Simplified horizontal friction
                 node.velocity.x *= (1.0f - friction);
                 node.velocity.z *= (1.0f - friction);
             }
         }
     }
+
 
 
     void PhysicsWorld::updateDamage(float dt) {

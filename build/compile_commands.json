@@ -10,5 +10,11 @@
   "command": "/usr/bin/g++ -I/home/solo/Projects/SoloPhysics/include -g -std=gnu++20 -Wall -Wextra -Wpedantic -o CMakeFiles/solo_physics.dir/src/physics/PhysicsWorld.cpp.o -c /home/solo/Projects/SoloPhysics/src/physics/PhysicsWorld.cpp",
   "file": "/home/solo/Projects/SoloPhysics/src/physics/PhysicsWorld.cpp",
   "output": "/home/solo/Projects/SoloPhysics/build/CMakeFiles/solo_physics.dir/src/physics/PhysicsWorld.cpp.o"
+},
+{
+  "directory": "/home/solo/Projects/SoloPhysics/build",
+  "command": "/usr/bin/g++ -I/home/solo/Projects/SoloPhysics/include -g -std=gnu++20 -Wall -Wextra -Wpedantic -o CMakeFiles/solo_physics.dir/src/rendering/Renderer.cpp.o -c /home/solo/Projects/SoloPhysics/src/rendering/Renderer.cpp",
+  "file": "/home/solo/Projects/SoloPhysics/src/rendering/Renderer.cpp",
+  "output": "/home/solo/Projects/SoloPhysics/build/CMakeFiles/solo_physics.dir/src/rendering/Renderer.cpp.o"
 }
 ]

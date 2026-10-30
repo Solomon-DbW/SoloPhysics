@@ -1,11 +1,5 @@
 {
 	"abstract" : true,
-	"artifacts" : 
-	[
-		{
-			"path" : "/usr/lib/libglm.a"
-		}
-	],
 	"backtrace" : 3,
 	"backtraceGraph" : 
 	{
@@ -13,11 +7,12 @@
 		[
 			"add_library",
 			"find_package",
-			"set_target_properties"
+			"set_target_properties",
+			"set_property"
 		],
 		"files" : 
 		[
-			"/usr/lib/cmake/glm/glmConfig.cmake",
+			"/usr/share/cmake/Modules/FindOpenGL.cmake",
 			"CMakeLists.txt"
 		],
 		"nodes" : 
@@ -28,7 +23,7 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 8,
+				"line" : 11,
 				"parent" : 0
 			},
 			{
@@ -38,13 +33,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 60,
+				"line" : 832,
 				"parent" : 2
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 62,
+				"line" : 833,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 835,
 				"parent" : 2
 			}
 		]
@@ -54,30 +55,37 @@
 		"major" : 2,
 		"minor" : 11
 	},
-	"id" : "glm::glm::@6890427a1f51a3e7e1df",
+	"id" : "OpenGL::GL::@6890427a1f51a3e7e1df",
 	"imported" : true,
 	"interfaceCompileDependencies" : 
 	[
 		{
 			"backtrace" : 4,
-			"id" : "glm::glm-header-only::@6890427a1f51a3e7e1df"
+			"id" : "OpenGL::OpenGL::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "OpenGL::GLX::@6890427a1f51a3e7e1df"
 		}
 	],
 	"interfaceLinkLibraries" : 
 	[
 		{
 			"backtrace" : 4,
-			"id" : "glm::glm-header-only::@6890427a1f51a3e7e1df"
+			"id" : "OpenGL::OpenGL::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "OpenGL::GLX::@6890427a1f51a3e7e1df"
 		}
 	],
 	"local" : true,
-	"name" : "glm::glm",
-	"nameOnDisk" : "libglm.a",
+	"name" : "OpenGL::GL",
 	"paths" : 
 	{
 		"build" : ".",
 		"source" : "."
 	},
 	"sources" : [],
-	"type" : "STATIC_LIBRARY"
+	"type" : "INTERFACE_LIBRARY"
 }
