@@ -219,6 +219,10 @@ void PhysicsWorld::integrate(float dt) {
         // 2. Apply gravity
         applyExternalForces();
 
+        if (externalForceCallback) {
+            externalForceCallback(*this);
+        }
+
         // 3. Calculate spring and damping forces
         solveBeamForces();
 

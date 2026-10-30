@@ -6,6 +6,8 @@
 #include <solophysics/Node.hpp>
 #include <solophysics/Beam.hpp>
 
+#include <functional>
+
 namespace solophysics {
 
 class PhysicsWorld {
@@ -15,6 +17,7 @@ class PhysicsWorld {
 public:
     std::vector<Node> nodes;
     std::vector<Beam> beams;
+    std::function<void(PhysicsWorld&)> externalForceCallback;
 
     Vector3D gravity{0.0f, -9.81f, 0.0f};          // Adds gravity to system
 
