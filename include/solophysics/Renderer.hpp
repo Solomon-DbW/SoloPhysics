@@ -3,6 +3,9 @@
 
 #include <solophysics/PhysicsWorld.hpp>
 
+#include <cstddef>
+#include <optional>
+
 struct GLFWwindow;
 
 namespace solophysics {
@@ -16,8 +19,8 @@ public:
     Renderer& operator=(const Renderer&) = delete;
 
     bool shouldClose() const;
+
     void pollEvents();
-    void render(const PhysicsWorld& world);
 
     bool keyPressed(int key) const;
     bool mousePressed(int button) const;
@@ -25,6 +28,13 @@ public:
     Vector3D mouseWorldPosition() const;
 
     void updateCamera();
+
+    void render(
+        const PhysicsWorld& world,
+        std::optional<std::size_t> grabbedNode,
+        std::optional<std::size_t> hoveredNode,
+        const Vector3D& mouseTarget
+    );
 
 private:
     GLFWwindow* window = nullptr;
@@ -38,11 +48,22 @@ private:
 
     bool wasMiddlePressed = false;
 
+    void updateProjection(int width, int height);
+
     void drawGround(const PhysicsWorld& world);
     void drawBeams(const PhysicsWorld& world);
-    void drawNodes(const PhysicsWorld& world);
 
-    void updateProjection(int width, int height);
+    void drawNodes(
+        const PhysicsWorld& world,
+        std::optional<std::size_t> grabbedNode,
+        std::optional<std::size_t> hoveredNode
+    );
+
+    void drawMouseSpring(
+        const PhysicsWorld& world,
+        std::optional<std::size_t> grabbedNode,
+        const Vector3D& mouseTarget
+    );
 };
 
 } // namespace solophysics

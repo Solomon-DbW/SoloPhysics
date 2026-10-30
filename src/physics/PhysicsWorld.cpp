@@ -141,6 +141,7 @@ void PhysicsWorld::integrate(float dt) {
             }
 
             // 2. Apply plastic deformation only if enabled
+
             if (beam.plasticDeformationEnabled &&
                 absoluteStrain > beam.yieldStrain) {
 
@@ -153,15 +154,26 @@ void PhysicsWorld::integrate(float dt) {
                 float yieldBoundary =
                     beam.restLength *
                     (1.0f + std::copysign(
-                        beam.yieldStrain, strain
+                        beam.yieldStrain,
+                        strain
                     ));
 
                 float excess = length - yieldBoundary;
 
-                beam.restLength += factor * excess;
+                float oldRestLength = beam.restLength;
 
-                beam.restLength =
-                    std::max(beam.restLength, 1e-6f);
+                beam.restLength += excess * factor;
+
+                beam.restLength = std::max(
+                    beam.restLength,
+                    1e-6f
+                );
+
+                if (std::abs(
+                    beam.restLength - oldRestLength
+                ) > 1e-7f) {
+                    beam.plasticallyDeformed = true;
+                }
             }
         }
     }

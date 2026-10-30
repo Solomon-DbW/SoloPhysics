@@ -6,9 +6,14 @@
 
 #include <algorithm>
 #include <cmath>
+#include <optional>
 #include <stdexcept>
 
 namespace solophysics {
+
+// ============================================================
+// Constructor / Destructor
+// ============================================================
 
 Renderer::Renderer(int width, int height) {
     if (!glfwInit()) {
@@ -19,7 +24,11 @@ Renderer::Renderer(int width, int height) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
     window = glfwCreateWindow(
-        width, height, "SoloPhysics", nullptr, nullptr
+        width,
+        height,
+        "SoloPhysics",
+        nullptr,
+        nullptr
     );
 
     if (!window) {
@@ -34,9 +43,9 @@ Renderer::Renderer(int width, int height) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Scroll callback adjusts zoom.
     glfwSetWindowUserPointer(window, this);
 
+    // Mouse wheel zoom
     glfwSetScrollCallback(
         window,
         [](GLFWwindow* win, double, double yoffset) {
@@ -64,8 +73,13 @@ Renderer::~Renderer() {
     if (window) {
         glfwDestroyWindow(window);
     }
+
     glfwTerminate();
 }
+
+// ============================================================
+// Window / Input
+// ============================================================
 
 bool Renderer::shouldClose() const {
     return glfwWindowShouldClose(window);
@@ -87,6 +101,10 @@ bool Renderer::mousePressed(int button) const {
     return glfwGetMouseButton(window, button) == GLFW_PRESS;
 }
 
+// ============================================================
+// Mouse coordinates
+// ============================================================
+
 Vector3D Renderer::mouseWorldPosition() const {
     double mx, my;
     glfwGetCursorPos(window, &mx, &my);
@@ -95,11 +113,15 @@ Vector3D Renderer::mouseWorldPosition() const {
     int framebufferWidth, framebufferHeight;
 
     glfwGetWindowSize(
-        window, &windowWidth, &windowHeight
+        window,
+        &windowWidth,
+        &windowHeight
     );
 
     glfwGetFramebufferSize(
-        window, &framebufferWidth, &framebufferHeight
+        window,
+        &framebufferWidth,
+        &framebufferHeight
     );
 
     if (windowWidth <= 0 || windowHeight <= 0 ||
@@ -129,6 +151,10 @@ Vector3D Renderer::mouseWorldPosition() const {
     return Vector3D{worldX, worldY, 0.0f};
 }
 
+// ============================================================
+// Camera
+// ============================================================
+
 void Renderer::updateCamera() {
     double mx, my;
     glfwGetCursorPos(window, &mx, &my);
@@ -142,7 +168,9 @@ void Renderer::updateCamera() {
 
         int windowWidth, windowHeight;
         glfwGetWindowSize(
-            window, &windowWidth, &windowHeight
+            window,
+            &windowWidth,
+            &windowHeight
         );
 
         if (width > 0 && height > 0 &&
@@ -196,41 +224,64 @@ void Renderer::updateProjection(int width, int height) {
     glLoadIdentity();
 }
 
+// ============================================================
+// Ground rendering
+// ============================================================
+
 void Renderer::drawGround(const PhysicsWorld& world) {
     glColor3f(0.6f, 0.65f, 0.7f);
     glLineWidth(3.0f);
 
     glBegin(GL_LINES);
+
     glVertex2f(-100.0f, world.groundY);
     glVertex2f(100.0f, world.groundY);
+
     glEnd();
 }
 
+// ============================================================
+// Beam rendering
+// ============================================================
+
 void Renderer::drawBeams(const PhysicsWorld& world) {
     glLineWidth(3.0f);
+
     glBegin(GL_LINES);
 
     for (const Beam& beam : world.beams) {
-        if (beam.broken) {
-            continue;
-        }
-
         const Node& a = world.nodes[beam.nodeA];
         const Node& b = world.nodes[beam.nodeB];
 
-        float length = glm::length(
-            b.position - a.position
-        );
+        if (beam.broken) {
+            // Broken beam: dark grey
+            glColor3f(0.35f, 0.35f, 0.35f);
 
-        float strain =
-            (length - beam.restLength) / beam.restLength;
+        } else if (beam.plasticallyDeformed) {
+            // Permanently deformed beam: orange
+            glColor3f(1.0f, 0.55f, 0.1f);
 
-        if (strain < -0.01f) {
-            glColor3f(0.2f, 0.5f, 1.0f);
-        } else if (strain > 0.01f) {
-            glColor3f(1.0f, 0.3f, 0.3f);
         } else {
-            glColor3f(0.3f, 0.9f, 0.5f);
+            float length = glm::length(
+                b.position - a.position
+            );
+
+            float strain =
+                (length - beam.restLength) /
+                beam.restLength;
+
+            if (strain < -0.01f) {
+                // Compression: blue
+                glColor3f(0.2f, 0.5f, 1.0f);
+
+            } else if (strain > 0.01f) {
+                // Extension: red
+                glColor3f(1.0f, 0.3f, 0.3f);
+
+            } else {
+                // Near rest length: green
+                glColor3f(0.3f, 0.9f, 0.5f);
+            }
         }
 
         glVertex2f(a.position.x, a.position.y);
@@ -240,21 +291,82 @@ void Renderer::drawBeams(const PhysicsWorld& world) {
     glEnd();
 }
 
-void Renderer::drawNodes(const PhysicsWorld& world) {
+// ============================================================
+// Node rendering
+// ============================================================
+
+void Renderer::drawNodes(
+    const PhysicsWorld& world,
+    std::optional<std::size_t> grabbedNode,
+    std::optional<std::size_t> hoveredNode
+) {
     glPointSize(12.0f);
-    glColor3f(1.0f, 0.9f, 0.3f);
 
     glBegin(GL_POINTS);
 
-    for (const Node& node : world.nodes) {
-        glVertex2f(node.position.x, node.position.y);
+    for (std::size_t i = 0; i < world.nodes.size(); ++i) {
+        if (grabbedNode && *grabbedNode == i) {
+            // Selected node: orange
+            glColor3f(1.0f, 0.5f, 0.1f);
+
+        } else if (hoveredNode && *hoveredNode == i) {
+            // Hovered node: cyan
+            glColor3f(0.2f, 0.9f, 1.0f);
+
+        } else {
+            // Normal node: yellow
+            glColor3f(1.0f, 0.9f, 0.3f);
+        }
+
+        const Node& node = world.nodes[i];
+
+        glVertex2f(
+            node.position.x,
+            node.position.y
+        );
     }
 
     glEnd();
 }
 
-void Renderer::render(const PhysicsWorld& world) {
+// ============================================================
+// Mouse spring rendering
+// ============================================================
+
+void Renderer::drawMouseSpring(
+    const PhysicsWorld& world,
+    std::optional<std::size_t> grabbedNode,
+    const Vector3D& mouseTarget
+) {
+    if (!grabbedNode || *grabbedNode >= world.nodes.size()) {
+        return;
+    }
+
+    const Node& node = world.nodes[*grabbedNode];
+
+    glColor3f(1.0f, 0.75f, 0.25f);
+    glLineWidth(2.0f);
+
+    glBegin(GL_LINES);
+
+    glVertex2f(node.position.x, node.position.y);
+    glVertex2f(mouseTarget.x, mouseTarget.y);
+
+    glEnd();
+}
+
+// ============================================================
+// Main rendering function
+// ============================================================
+
+void Renderer::render(
+    const PhysicsWorld& world,
+    std::optional<std::size_t> grabbedNode,
+    std::optional<std::size_t> hoveredNode,
+    const Vector3D& mouseTarget
+) {
     int width, height;
+
     glfwGetFramebufferSize(window, &width, &height);
 
     if (width <= 0 || height <= 0) {
@@ -270,7 +382,8 @@ void Renderer::render(const PhysicsWorld& world) {
 
     drawGround(world);
     drawBeams(world);
-    drawNodes(world);
+    drawMouseSpring(world, grabbedNode, mouseTarget);
+    drawNodes(world, grabbedNode, hoveredNode);
 
     glfwSwapBuffers(window);
 }

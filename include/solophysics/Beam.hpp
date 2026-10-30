@@ -19,6 +19,7 @@ struct Beam {
 
     bool broken = false;
     bool plasticDeformationEnabled = true;
+    bool plasticallyDeformed = false;
 };
 
 }
