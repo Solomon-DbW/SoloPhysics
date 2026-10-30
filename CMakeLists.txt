@@ -1,22 +1,19 @@
 cmake_minimum_required(VERSION 3.23)
 
-project(SoloPhysics
-    VERSION 0.1.0
-    LANGUAGES CXX
-)
+project(SoloPhysics LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(glm CONFIG REQUIRED)
 
 add_executable(solo_physics
     src/main.cpp
+    src/physics/PhysicsWorld.cpp
 )
 
 target_include_directories(solo_physics
-    PRIVATE include
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 target_link_libraries(solo_physics
@@ -24,8 +21,5 @@ target_link_libraries(solo_physics
 )
 
 target_compile_options(solo_physics
-    PRIVATE
-    -Wall
-    -Wextra
-    -Wpedantic
+    PRIVATE -Wall -Wextra -Wpedantic
 )

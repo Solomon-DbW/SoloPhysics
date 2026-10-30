@@ -1,3 +1,6 @@
 # ninja log v7
-2	622	1793184018933086023	CMakeFiles/solo_physics.dir/src/main.cpp.o	5ace95ebfbd9e578
-623	690	1793184019554086045	solo_physics	6008b956ee4740a3
+2	727	1793374903736848322	CMakeFiles/solo_physics.dir/src/main.cpp.o	a327efbf729397c5
+727	802	1793374904462235094	solo_physics	f43de3142175717e
+2	1032	1793374715099850950	CMakeFiles/solo_physics.dir/src/physics/PhysicsWorld.cpp.o	9a4c373d81a5dafd
+2	728	1793374976182847313	CMakeFiles/solo_physics.dir/src/main.cpp.o	a327efbf729397c5
+728	804	1793374976909024345	solo_physics	f43de3142175717e

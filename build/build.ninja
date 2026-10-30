@@ -52,10 +52,19 @@ build cmake_object_order_depends_target_solo_physics: phony || .
 build CMakeFiles/solo_physics.dir/src/main.cpp.o: CXX_COMPILER__solo_physics_unscanned_Debug /home/solo/Projects/SoloPhysics/src/main.cpp || cmake_object_order_depends_target_solo_physics
   CONFIG = Debug
   DEP_FILE = CMakeFiles/solo_physics.dir/src/main.cpp.o.d
-  FLAGS = -g -std=c++20 -Wall -Wextra -Wpedantic
+  FLAGS = -g -std=gnu++20 -Wall -Wextra -Wpedantic
   INCLUDES = -I/home/solo/Projects/SoloPhysics/include
   OBJECT_DIR = CMakeFiles/solo_physics.dir
   OBJECT_FILE_DIR = CMakeFiles/solo_physics.dir/src
+  TARGET_SUPPORT_DIR = CMakeFiles/solo_physics.dir
+
+build CMakeFiles/solo_physics.dir/src/physics/PhysicsWorld.cpp.o: CXX_COMPILER__solo_physics_unscanned_Debug /home/solo/Projects/SoloPhysics/src/physics/PhysicsWorld.cpp || cmake_object_order_depends_target_solo_physics
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/solo_physics.dir/src/physics/PhysicsWorld.cpp.o.d
+  FLAGS = -g -std=gnu++20 -Wall -Wextra -Wpedantic
+  INCLUDES = -I/home/solo/Projects/SoloPhysics/include
+  OBJECT_DIR = CMakeFiles/solo_physics.dir
+  OBJECT_FILE_DIR = CMakeFiles/solo_physics.dir/src/physics
   TARGET_SUPPORT_DIR = CMakeFiles/solo_physics.dir
 
 
@@ -66,7 +75,7 @@ build CMakeFiles/solo_physics.dir/src/main.cpp.o: CXX_COMPILER__solo_physics_uns
 #############################################
 # Link the executable solo_physics
 
-build solo_physics: CXX_EXECUTABLE_LINKER__solo_physics_Debug CMakeFiles/solo_physics.dir/src/main.cpp.o | /usr/lib/libglm.a
+build solo_physics: CXX_EXECUTABLE_LINKER__solo_physics_Debug CMakeFiles/solo_physics.dir/src/main.cpp.o CMakeFiles/solo_physics.dir/src/physics/PhysicsWorld.cpp.o | /usr/lib/libglm.a
   CONFIG = Debug
   DEP_FILE = CMakeFiles/solo_physics.dir/link.d
   FLAGS = -g

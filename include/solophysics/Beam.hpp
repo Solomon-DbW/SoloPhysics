@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstddef>
+#include <cstddef>              // Allows for 'std::varname'
 
 namespace solophysics {
 
@@ -13,11 +13,12 @@ struct Beam {
     float damping = 10.0f;       // Beam's damping coefficient (the 'c' in F = -cv) where F = damping force and v = relative velocity projected along the beam
 
     // Simplified material parameters for initial beam
-    float yieldStrain = 0.15f;   // Beam's elastic limit
+    float yieldStrain = 0.15f;   // Beam plastically deforms when the beam stretches or compresses by more than 15% relative to its current rest length
     float breakStrain = 0.60f;   // Beam's maximum tensile stress before it breaks
     float plasticity = 2.0f;
 
     bool broken = false;
+    bool plasticDeformationEnabled = true;
 };
 
 }
