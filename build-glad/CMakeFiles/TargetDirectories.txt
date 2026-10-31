@@ -1,0 +1,6 @@
+/home/solo/Projects/SoloPhysics/build-glad/CMakeFiles/glad_gl_core_33.dir
+/home/solo/Projects/SoloPhysics/build-glad/CMakeFiles/solo_physics.dir
+/home/solo/Projects/SoloPhysics/build-glad/CMakeFiles/edit_cache.dir
+/home/solo/Projects/SoloPhysics/build-glad/CMakeFiles/rebuild_cache.dir
+/home/solo/Projects/SoloPhysics/build-glad/_deps/glad-build/CMakeFiles/edit_cache.dir
+/home/solo/Projects/SoloPhysics/build-glad/_deps/glad-build/CMakeFiles/rebuild_cache.dir

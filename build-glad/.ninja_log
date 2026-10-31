@@ -1,0 +1,15 @@
+# ninja log v7
+1008	1835	1793447258886967760	CMakeFiles/solo_physics.dir/src/physics/PhysicsWorld.cpp.o	9d5a61615ae627c0
+1008	2040	1793447258886636519	CMakeFiles/solo_physics.dir/src/main.cpp.o	9d8369362023a17b
+1009	2209	1793447258887041034	CMakeFiles/solo_physics.dir/src/rendering/Renderer.cpp.o	2c00b7e03d9bc925
+2209	2281	1793447260087041047	solo_physics	e5c200c5d5497ce1
+2	1007	1793447258885041034	gladsources/glad_gl_core_33/include/KHR/khrplatform.h	df94ce7a60b128b9
+2	1007	1793447258885041034	gladsources/glad_gl_core_33/include/glad/gl.h	df94ce7a60b128b9
+2	1007	1793447258885041034	gladsources/glad_gl_core_33/src/gl.c	df94ce7a60b128b9
+2	1007	1793447258885041034	gladsources/glad_gl_core_33/args.txt	df94ce7a60b128b9
+2	1007	1793447258885041034	/home/solo/Projects/SoloPhysics/build-glad/gladsources/glad_gl_core_33/include/KHR/khrplatform.h	df94ce7a60b128b9
+2	1007	1793447258885041034	/home/solo/Projects/SoloPhysics/build-glad/gladsources/glad_gl_core_33/include/glad/gl.h	df94ce7a60b128b9
+2	1007	1793447258885041034	/home/solo/Projects/SoloPhysics/build-glad/gladsources/glad_gl_core_33/src/gl.c	df94ce7a60b128b9
+2	1007	1793447258885041034	/home/solo/Projects/SoloPhysics/build-glad/gladsources/glad_gl_core_33/args.txt	df94ce7a60b128b9
+1008	1107	1793447258886041034	CMakeFiles/glad_gl_core_33.dir/gladsources/glad_gl_core_33/src/gl.c.o	a1b29762345b5c11
+1107	1147	1793447258985041035	libglad_gl_core_33.a	5db25f3a15c98658

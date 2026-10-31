@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/solo/Projects/SoloPhysics/build-glad/cmake_install.cmake",
+		"/home/solo/Projects/SoloPhysics/build-glad/_deps/glad-build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

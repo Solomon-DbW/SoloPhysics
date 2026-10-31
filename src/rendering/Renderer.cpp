@@ -1,93 +1,207 @@
-
 #include <solophysics/Renderer.hpp>
 
+// GLAD 2 must be included before GLFW and any system OpenGL headers.
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
+
 #include <glm/geometric.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <algorithm>
 #include <cmath>
-#include <optional>
+#include <cstddef>
+#include <iostream>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 namespace solophysics {
+namespace {
 
-// ============================================================
-// Constructor / Destructor
-// ============================================================
+struct Vertex {
+    Vector3D position;
+    Vector3D colour;
+};
+
+constexpr const char* vertexShaderSource = R"GLSL(
+#version 330 core
+layout(location = 0) in vec3 aPosition;
+layout(location = 1) in vec3 aColour;
+uniform mat4 uMVP;
+out vec3 vColour;
+void main() {
+    gl_Position = uMVP * vec4(aPosition, 1.0);
+    vColour = aColour;
+}
+)GLSL";
+
+constexpr const char* fragmentShaderSource = R"GLSL(
+#version 330 core
+in vec3 vColour;
+out vec4 FragColour;
+uniform bool uRoundPoints;
+void main() {
+    if (uRoundPoints) {
+        vec2 p = gl_PointCoord * 2.0 - 1.0;
+        if (dot(p, p) > 1.0) discard;
+    }
+    FragColour = vec4(vColour, 1.0);
+}
+)GLSL";
+
+GLuint compileShader(GLenum type, const char* source) {
+    GLuint shader = glCreateShader(type);
+    glShaderSource(shader, 1, &source, nullptr);
+    glCompileShader(shader);
+
+    GLint ok = GL_FALSE;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &ok);
+    if (ok != GL_TRUE) {
+        GLint length = 0;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+        std::string log(static_cast<std::size_t>(std::max(1, length)), '\0');
+        glGetShaderInfoLog(shader, length, nullptr, log.data());
+        glDeleteShader(shader);
+        throw std::runtime_error("Shader compilation failed: " + log);
+    }
+    return shader;
+}
+
+GLuint createProgram() {
+    GLuint vs = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
+    GLuint fs = 0;
+    try {
+        fs = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+    } catch (...) {
+        glDeleteShader(vs);
+        throw;
+    }
+
+    GLuint program = glCreateProgram();
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+
+    GLint ok = GL_FALSE;
+    glGetProgramiv(program, GL_LINK_STATUS, &ok);
+    if (ok != GL_TRUE) {
+        GLint length = 0;
+        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
+        std::string log(static_cast<std::size_t>(std::max(1, length)), '\0');
+        glGetProgramInfoLog(program, length, nullptr, log.data());
+        glDeleteProgram(program);
+        throw std::runtime_error("Shader linking failed: " + log);
+    }
+    return program;
+}
+
+void addLine(std::vector<Vertex>& vertices,
+             const Vector3D& a, const Vector3D& b,
+             const Vector3D& colour) {
+    vertices.push_back({a, colour});
+    vertices.push_back({b, colour});
+}
+
+} // namespace
 
 Renderer::Renderer(int width, int height) {
     if (!glfwInit()) {
-        throw std::runtime_error("GLFW initialisation failed");
+        throw std::runtime_error("Failed to initialise GLFW");
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
-    window = glfwCreateWindow(
-        width,
-        height,
-        "SoloPhysics",
-        nullptr,
-        nullptr
-    );
-
+    window = glfwCreateWindow(width, height, "SoloPhysics 3D", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
-        throw std::runtime_error("Window creation failed");
+        throw std::runtime_error("Failed to create an OpenGL 3.3 core window");
     }
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
-    glEnable(GL_POINT_SMOOTH);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // GLAD uses GLFW's context-specific resolver, compatible with EGL/Wayland
+    // and GLX/X11. Initialise ONLY after making the GL context current.
+    const int loadedVersion = gladLoadGL(glfwGetProcAddress);
+    if (loadedVersion == 0 || !GLAD_GL_VERSION_3_3) {
+        glfwDestroyWindow(window);
+        window = nullptr;
+        glfwTerminate();
+        throw std::runtime_error(
+            "Failed to load OpenGL 3.3 functions with GLAD. "
+            "Check the OpenGL context and GPU driver."
+        );
+    }
 
+    std::cout << "OpenGL loaded via GLAD "
+              << GLAD_VERSION_MAJOR(loadedVersion) << '.'
+              << GLAD_VERSION_MINOR(loadedVersion) << '\n';
+
+    try {
+        program = createProgram();
+        mvpLocation = glGetUniformLocation(program, "uMVP");
+        roundPointsLocation = glGetUniformLocation(program, "uRoundPoints");
+
+        glGenVertexArrays(1, &vao);
+        glGenBuffers(1, &vbo);
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+                              sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, position)));
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
+                              sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, colour)));
+        glEnableVertexAttribArray(1);
+        glBindVertexArray(0);
+    } catch (...) {
+        if (vbo) glDeleteBuffers(1, &vbo);
+        if (vao) glDeleteVertexArrays(1, &vao);
+        if (program) glDeleteProgram(program);
+        glfwDestroyWindow(window);
+        window = nullptr;
+        glfwTerminate();
+        throw;
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
     glfwSetWindowUserPointer(window, this);
 
-    // Mouse wheel zoom
-    glfwSetScrollCallback(
-        window,
-        [](GLFWwindow* win, double, double yoffset) {
-            auto* renderer = static_cast<Renderer*>(
-                glfwGetWindowUserPointer(win)
+    glfwSetScrollCallback(window, [](GLFWwindow* w, double, double y) {
+        auto* self = static_cast<Renderer*>(glfwGetWindowUserPointer(w));
+        if (self) {
+            self->cameraDistance = std::clamp(
+                self->cameraDistance * std::pow(0.9f, static_cast<float>(y)),
+                1.5f, 40.0f
             );
-
-            if (renderer) {
-                float factor = std::pow(
-                    1.1f,
-                    static_cast<float>(yoffset)
-                );
-
-                renderer->zoom = std::clamp(
-                    renderer->zoom * factor,
-                    0.2f,
-                    10.0f
-                );
-            }
         }
-    );
+    });
 }
 
 Renderer::~Renderer() {
     if (window) {
+        glfwMakeContextCurrent(window);
+        if (vbo) glDeleteBuffers(1, &vbo);
+        if (vao) glDeleteVertexArrays(1, &vao);
+        if (program) glDeleteProgram(program);
         glfwDestroyWindow(window);
     }
-
     glfwTerminate();
 }
 
-// ============================================================
-// Window / Input
-// ============================================================
-
 bool Renderer::shouldClose() const {
-    return glfwWindowShouldClose(window);
+    return glfwWindowShouldClose(window) == GLFW_TRUE;
 }
 
 void Renderer::pollEvents() {
     glfwPollEvents();
-
     if (keyPressed(GLFW_KEY_ESCAPE)) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
@@ -101,263 +215,140 @@ bool Renderer::mousePressed(int button) const {
     return glfwGetMouseButton(window, button) == GLFW_PRESS;
 }
 
-// ============================================================
-// Mouse coordinates
-// ============================================================
-
-Vector3D Renderer::mouseWorldPosition() const {
-    double mx, my;
-    glfwGetCursorPos(window, &mx, &my);
-
-    int windowWidth, windowHeight;
-    int framebufferWidth, framebufferHeight;
-
-    glfwGetWindowSize(
-        window,
-        &windowWidth,
-        &windowHeight
-    );
-
-    glfwGetFramebufferSize(
-        window,
-        &framebufferWidth,
-        &framebufferHeight
-    );
-
-    if (windowWidth <= 0 || windowHeight <= 0 ||
-        framebufferWidth <= 0 || framebufferHeight <= 0) {
-        return Vector3D{cameraX, cameraY, 0.0f};
-    }
-
-    float aspect =
-        static_cast<float>(framebufferWidth) /
-        static_cast<float>(framebufferHeight);
-
-    float halfHeight = 2.5f / zoom;
-    float halfWidth = halfHeight * aspect;
-
-    float normalizedX =
-        static_cast<float>(mx / windowWidth);
-
-    float normalizedY =
-        static_cast<float>(my / windowHeight);
-
-    float worldX =
-        cameraX + (normalizedX * 2.0f - 1.0f) * halfWidth;
-
-    float worldY =
-        cameraY + (1.0f - normalizedY * 2.0f) * halfHeight;
-
-    return Vector3D{worldX, worldY, 0.0f};
+void Renderer::setTitle(const char* title) {
+    glfwSetWindowTitle(window, title);
 }
 
-// ============================================================
-// Camera
-// ============================================================
+Vector3D Renderer::cameraPosition() const {
+    return cameraTarget + cameraDistance * Vector3D{
+        std::cos(cameraPitch) * std::sin(cameraYaw),
+        std::sin(cameraPitch),
+        std::cos(cameraPitch) * std::cos(cameraYaw)
+    };
+}
+
+glm::mat4 Renderer::viewMatrix() const {
+    return glm::lookAt(cameraPosition(), cameraTarget, Vector3D{0.0f, 1.0f, 0.0f});
+}
+
+glm::mat4 Renderer::projectionMatrix() const {
+    int width = 0, height = 0;
+    glfwGetFramebufferSize(window, &width, &height);
+    float aspect = static_cast<float>(std::max(width, 1)) /
+                   static_cast<float>(std::max(height, 1));
+    return glm::perspective(glm::radians(55.0f), aspect, 0.05f, 100.0f);
+}
 
 void Renderer::updateCamera() {
-    double mx, my;
+    double mx = 0.0, my = 0.0;
     glfwGetCursorPos(window, &mx, &my);
 
-    bool middlePressed =
-        mousePressed(GLFW_MOUSE_BUTTON_MIDDLE);
+    bool right = mousePressed(GLFW_MOUSE_BUTTON_RIGHT);
+    bool middle = mousePressed(GLFW_MOUSE_BUTTON_MIDDLE);
+    double dx = mx - previousMouseX;
+    double dy = my - previousMouseY;
 
-    if (middlePressed && wasMiddlePressed) {
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-
-        int windowWidth, windowHeight;
-        glfwGetWindowSize(
-            window,
-            &windowWidth,
-            &windowHeight
+    if (right && previousRight) {
+        cameraYaw -= static_cast<float>(dx) * 0.006f;
+        cameraPitch = std::clamp(
+            cameraPitch + static_cast<float>(dy) * 0.006f,
+            -1.45f, 1.45f
         );
+    }
 
-        if (width > 0 && height > 0 &&
-            windowWidth > 0 && windowHeight > 0) {
-
-            float aspect =
-                static_cast<float>(width) /
-                static_cast<float>(height);
-
-            float worldHeight = 5.0f / zoom;
-            float worldWidth = worldHeight * aspect;
-
-            cameraX -= static_cast<float>(
-                (mx - previousMouseX) *
-                worldWidth / windowWidth
-            );
-
-            cameraY += static_cast<float>(
-                (my - previousMouseY) *
-                worldHeight / windowHeight
-            );
-        }
+    if (middle && previousMiddle) {
+        int width = 0, height = 0;
+        glfwGetWindowSize(window, &width, &height);
+        const Vector3D forward = glm::normalize(cameraTarget - cameraPosition());
+        const Vector3D rightVector = glm::normalize(
+            glm::cross(forward, Vector3D{0.0f, 1.0f, 0.0f})
+        );
+        const Vector3D upVector = glm::normalize(glm::cross(rightVector, forward));
+        float scale = cameraDistance * 1.0f / static_cast<float>(std::max(height, 1));
+        cameraTarget -= rightVector * static_cast<float>(dx) * scale;
+        cameraTarget += upVector * static_cast<float>(dy) * scale;
     }
 
     previousMouseX = mx;
     previousMouseY = my;
-    wasMiddlePressed = middlePressed;
+    previousRight = right;
+    previousMiddle = middle;
 }
 
-void Renderer::updateProjection(int width, int height) {
-    float aspect =
-        static_cast<float>(width) /
-        static_cast<float>(height);
+std::optional<Renderer::Ray> Renderer::cursorRay() const {
+    int fw = 0, fh = 0, ww = 0, wh = 0;
+    glfwGetFramebufferSize(window, &fw, &fh);
+    glfwGetWindowSize(window, &ww, &wh);
+    if (fw <= 0 || fh <= 0 || ww <= 0 || wh <= 0) return std::nullopt;
 
-    float halfHeight = 2.5f / zoom;
-    float halfWidth = halfHeight * aspect;
+    double mx = 0.0, my = 0.0;
+    glfwGetCursorPos(window, &mx, &my);
+    float x = static_cast<float>(mx * fw / ww);
+    float y = static_cast<float>((wh - my) * fh / wh);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    glOrtho(
-        cameraX - halfWidth,
-        cameraX + halfWidth,
-        cameraY - halfHeight,
-        cameraY + halfHeight,
-        -1.0,
-        1.0
+    glm::vec4 viewport{0.0f, 0.0f, static_cast<float>(fw), static_cast<float>(fh)};
+    Vector3D nearPoint = glm::unProject(
+        Vector3D{x, y, 0.0f}, viewMatrix(), projectionMatrix(), viewport
     );
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    Vector3D farPoint = glm::unProject(
+        Vector3D{x, y, 1.0f}, viewMatrix(), projectionMatrix(), viewport
+    );
+    return Ray{nearPoint, glm::normalize(farPoint - nearPoint)};
 }
 
-// ============================================================
-// Ground rendering
-// ============================================================
+std::optional<std::size_t> Renderer::pickNode(
+    const PhysicsWorld& world, float radiusPixels
+) const {
+    int fw = 0, fh = 0, ww = 0, wh = 0;
+    glfwGetFramebufferSize(window, &fw, &fh);
+    glfwGetWindowSize(window, &ww, &wh);
+    if (fw <= 0 || fh <= 0 || ww <= 0 || wh <= 0) return std::nullopt;
 
-void Renderer::drawGround(const PhysicsWorld& world) {
-    glColor3f(0.6f, 0.65f, 0.7f);
-    glLineWidth(3.0f);
+    double mx = 0.0, my = 0.0;
+    glfwGetCursorPos(window, &mx, &my);
+    float x = static_cast<float>(mx * fw / ww);
+    float y = static_cast<float>((wh - my) * fh / wh);
+    glm::vec4 viewport{0.0f, 0.0f, static_cast<float>(fw), static_cast<float>(fh)};
 
-    glBegin(GL_LINES);
-
-    glVertex2f(-100.0f, world.groundY);
-    glVertex2f(100.0f, world.groundY);
-
-    glEnd();
-}
-
-// ============================================================
-// Beam rendering
-// ============================================================
-
-void Renderer::drawBeams(const PhysicsWorld& world) {
-    glLineWidth(3.0f);
-
-    glBegin(GL_LINES);
-
-    for (const Beam& beam : world.beams) {
-        const Node& a = world.nodes[beam.nodeA];
-        const Node& b = world.nodes[beam.nodeB];
-
-        if (beam.broken) {
-            // Broken beam: dark grey
-            glColor3f(0.35f, 0.35f, 0.35f);
-
-        } else if (beam.plasticallyDeformed) {
-            // Permanently deformed beam: orange
-            glColor3f(1.0f, 0.55f, 0.1f);
-
-        } else {
-            float length = glm::length(
-                b.position - a.position
-            );
-
-            float strain =
-                (length - beam.restLength) /
-                beam.restLength;
-
-            if (strain < -0.01f) {
-                // Compression: blue
-                glColor3f(0.2f, 0.5f, 1.0f);
-
-            } else if (strain > 0.01f) {
-                // Extension: red
-                glColor3f(1.0f, 0.3f, 0.3f);
-
-            } else {
-                // Near rest length: green
-                glColor3f(0.3f, 0.9f, 0.5f);
-            }
-        }
-
-        glVertex2f(a.position.x, a.position.y);
-        glVertex2f(b.position.x, b.position.y);
-    }
-
-    glEnd();
-}
-
-// ============================================================
-// Node rendering
-// ============================================================
-
-void Renderer::drawNodes(
-    const PhysicsWorld& world,
-    std::optional<std::size_t> grabbedNode,
-    std::optional<std::size_t> hoveredNode
-) {
-    glPointSize(12.0f);
-
-    glBegin(GL_POINTS);
+    float bestDistanceSquared = radiusPixels * radiusPixels;
+    std::optional<std::size_t> best;
+    float bestDepth = 1.0f;
 
     for (std::size_t i = 0; i < world.nodes.size(); ++i) {
-        if (grabbedNode && *grabbedNode == i) {
-            // Selected node: orange
-            glColor3f(1.0f, 0.5f, 0.1f);
-
-        } else if (hoveredNode && *hoveredNode == i) {
-            // Hovered node: cyan
-            glColor3f(0.2f, 0.9f, 1.0f);
-
-        } else {
-            // Normal node: yellow
-            glColor3f(1.0f, 0.9f, 0.3f);
+        Vector3D p = glm::project(world.nodes[i].position,
+                                  viewMatrix(), projectionMatrix(), viewport);
+        if (p.z < 0.0f || p.z > 1.0f) continue;
+        float d2 = (p.x - x) * (p.x - x) + (p.y - y) * (p.y - y);
+        if (d2 < bestDistanceSquared ||
+            (best && std::abs(d2 - bestDistanceSquared) < 1.0f && p.z < bestDepth)) {
+            bestDistanceSquared = d2;
+            bestDepth = p.z;
+            best = i;
         }
-
-        const Node& node = world.nodes[i];
-
-        glVertex2f(
-            node.position.x,
-            node.position.y
-        );
     }
-
-    glEnd();
+    return best;
 }
 
-// ============================================================
-// Mouse spring rendering
-// ============================================================
-
-void Renderer::drawMouseSpring(
-    const PhysicsWorld& world,
-    std::optional<std::size_t> grabbedNode,
-    const Vector3D& mouseTarget
-) {
-    if (!grabbedNode || *grabbedNode >= world.nodes.size()) {
-        return;
-    }
-
-    const Node& node = world.nodes[*grabbedNode];
-
-    glColor3f(1.0f, 0.75f, 0.25f);
-    glLineWidth(2.0f);
-
-    glBegin(GL_LINES);
-
-    glVertex2f(node.position.x, node.position.y);
-    glVertex2f(mouseTarget.x, mouseTarget.y);
-
-    glEnd();
+void Renderer::beginDrag(const Vector3D& nodePosition) {
+    dragging = true;
+    dragPlanePoint = nodePosition;
+    dragPlaneNormal = glm::normalize(cameraTarget - cameraPosition());
 }
 
-// ============================================================
-// Main rendering function
-// ============================================================
+std::optional<Vector3D> Renderer::mouseDragTarget() const {
+    if (!dragging) return std::nullopt;
+    auto ray = cursorRay();
+    if (!ray) return std::nullopt;
+    float denominator = glm::dot(ray->direction, dragPlaneNormal);
+    if (std::abs(denominator) < 1e-5f) return std::nullopt;
+    float t = glm::dot(dragPlanePoint - ray->origin, dragPlaneNormal) / denominator;
+    if (t < 0.0f) return std::nullopt;
+    return ray->origin + t * ray->direction;
+}
+
+void Renderer::endDrag() {
+    dragging = false;
+}
 
 void Renderer::render(
     const PhysicsWorld& world,
@@ -365,26 +356,98 @@ void Renderer::render(
     std::optional<std::size_t> hoveredNode,
     const Vector3D& mouseTarget
 ) {
-    int width, height;
+    int fw = 0, fh = 0;
+    glfwGetFramebufferSize(window, &fw, &fh);
+    if (fw <= 0 || fh <= 0) return;
 
-    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, fw, fh);
+    glClearColor(0.055f, 0.075f, 0.10f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (width <= 0 || height <= 0) {
-        return;
+    const glm::mat4 mvp = projectionMatrix() * viewMatrix();
+    glUseProgram(program);
+    glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvp));
+    glBindVertexArray(vao);
+
+    auto drawVertices = [this](const std::vector<Vertex>& vertices, GLenum mode, bool rounded) {
+        if (vertices.empty()) return;
+        glUniform1i(roundPointsLocation, rounded ? 1 : 0);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER,
+                     static_cast<GLsizeiptr>(vertices.size() * sizeof(Vertex)),
+                     vertices.data(), GL_DYNAMIC_DRAW);
+        glDrawArrays(mode, 0, static_cast<GLsizei>(vertices.size()));
+    };
+
+    // Ground grid and reference axes (Y is up).
+    std::vector<Vertex> ground;
+    ground.reserve(100);
+    const Vector3D gridColour{0.22f, 0.28f, 0.34f};
+    for (int i = -10; i <= 10; ++i) {
+        addLine(ground, Vector3D{static_cast<float>(i), world.groundY, -10.0f},
+                        Vector3D{static_cast<float>(i), world.groundY, 10.0f}, gridColour);
+        addLine(ground, Vector3D{-10.0f, world.groundY, static_cast<float>(i)},
+                        Vector3D{10.0f, world.groundY, static_cast<float>(i)}, gridColour);
+    }
+    addLine(ground, {-10.0f, world.groundY + 0.003f, 0.0f},
+                    {10.0f, world.groundY + 0.003f, 0.0f}, {0.6f, 0.25f, 0.25f});
+    addLine(ground, {0.0f, world.groundY + 0.003f, -10.0f},
+                    {0.0f, world.groundY + 0.003f, 10.0f}, {0.25f, 0.40f, 0.7f});
+    glLineWidth(1.0f);
+    drawVertices(ground, GL_LINES, false);
+
+    // Strained, plastically-deformed and broken beam connections.
+    std::vector<Vertex> beams;
+    std::vector<Vertex> broken;
+    beams.reserve(world.beams.size() * 2);
+    for (const Beam& beam : world.beams) {
+        const Node& a = world.nodes[beam.nodeA];
+        const Node& b = world.nodes[beam.nodeB];
+        if (beam.broken) {
+            addLine(broken, a.position, b.position, {0.38f, 0.39f, 0.42f});
+            continue;
+        }
+        const float currentLength = glm::length(b.position - a.position);
+        const float strain = (currentLength - beam.restLength) / beam.restLength;
+        Vector3D colour{0.3f, 0.9f, 0.5f};
+        if (beam.plasticallyDeformed) colour = {1.0f, 0.55f, 0.1f};
+        else if (strain < -0.01f) colour = {0.2f, 0.5f, 1.0f};
+        else if (strain > 0.01f) colour = {1.0f, 0.3f, 0.3f};
+        addLine(beams, a.position, b.position, colour);
+    }
+    glLineWidth(3.0f);
+    drawVertices(beams, GL_LINES, false);
+    glLineWidth(1.0f);
+    drawVertices(broken, GL_LINES, false);
+
+    if (grabbedNode && *grabbedNode < world.nodes.size()) {
+        std::vector<Vertex> mouseSpring;
+        addLine(mouseSpring, world.nodes[*grabbedNode].position,
+                mouseTarget, {1.0f, 0.77f, 0.25f});
+        glLineWidth(2.0f);
+        drawVertices(mouseSpring, GL_LINES, false);
     }
 
-    glViewport(0, 0, width, height);
+    // Render node points last so they're easy to identify and grab.
+    std::vector<Vertex> points;
+    points.reserve(world.nodes.size());
+    for (std::size_t i = 0; i < world.nodes.size(); ++i) {
+        Vector3D colour{1.0f, 0.90f, 0.3f};
+        if (world.nodes[i].fixed) colour = {0.72f, 0.42f, 1.0f};
+        if (hoveredNode && *hoveredNode == i) colour = {0.2f, 0.9f, 1.0f};
+        if (grabbedNode && *grabbedNode == i) colour = {1.0f, 0.5f, 0.1f};
+        points.push_back({world.nodes[i].position, colour});
+    }
+    glDisable(GL_DEPTH_TEST);
+    glPointSize(13.0f);
+    // gl_PointSize in the shader is required when GL_PROGRAM_POINT_SIZE is enabled.
+    glDisable(GL_PROGRAM_POINT_SIZE);
+    drawVertices(points, GL_POINTS, true);
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    glEnable(GL_DEPTH_TEST);
 
-    glClearColor(0.055f, 0.075f, 0.10f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    updateProjection(width, height);
-
-    drawGround(world);
-    drawBeams(world);
-    drawMouseSpring(world, grabbedNode, mouseTarget);
-    drawNodes(world, grabbedNode, hoveredNode);
-
+    glBindVertexArray(0);
+    glUseProgram(0);
     glfwSwapBuffers(window);
 }
 

@@ -1,4 +1,3 @@
-
 #include <solophysics/PhysicsWorld.hpp>
 #include <solophysics/Renderer.hpp>
 
@@ -6,74 +5,76 @@
 #include <glm/geometric.hpp>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <exception>
 #include <iostream>
 #include <optional>
+#include <sstream>
+#include <utility>
 
 int main() {
     try {
         using namespace solophysics;
 
-        // =====================================================
-        // CREATE PHYSICS WORLD
-        // =====================================================
-
+        // The core physics system remains 3D. Build a braced 8-node cube.
         auto createWorld = []() {
             PhysicsWorld world;
-
             world.groundY = 0.0f;
             world.restitution = 0.2f;
             world.friction = 0.4f;
 
-            // Disable gravity for the structural damage test
-            world.gravity = Vector3D{0.0f, 0.0f, 0.0f};
+            // Default to an anchored, gravity-free damage experiment.
+            // Press F to unanchor and G to enable gravity for a drop test.
+            world.gravity = {0.0f, 0.0f, 0.0f};
 
-            // Square nodes
-            Node topLeft;
-            topLeft.position = {-0.5f, 3.0f, 0.0f};
+            const std::array<Vector3D, 8> positions{{
+                {-0.5f, 2.0f, -0.5f}, // 0 bottom rear left (anchor)
+                { 0.5f, 2.0f, -0.5f}, // 1 bottom rear right
+                { 0.5f, 2.0f,  0.5f}, // 2 bottom front right
+                {-0.5f, 2.0f,  0.5f}, // 3 bottom front left
+                {-0.5f, 3.0f, -0.5f}, // 4 top rear left
+                { 0.5f, 3.0f, -0.5f}, // 5 top rear right
+                { 0.5f, 3.0f,  0.5f}, // 6 top front right
+                {-0.5f, 3.0f,  0.5f}  // 7 top front left
+            }};
 
-            Node topRight;
-            topRight.position = {0.5f, 3.0f, 0.0f};
+            for (const auto& p : positions) {
+                Node node;
+                node.position = p;
+                node.mass = 1.0f;
+                world.addNode(node);
+            }
 
-            Node bottomLeft;
-            bottomLeft.position = {-0.5f, 2.0f, 0.0f};
+            world.nodes[0].fixed = true;
 
-            Node bottomRight;
-            bottomRight.position = {0.5f, 2.0f, 0.0f};
+            // 12 edges + 12 face diagonals + 4 body diagonals = 28 beams.
+            const std::array<std::pair<std::size_t, std::size_t>, 28> connections{{
+                {0,1}, {1,2}, {2,3}, {3,0},
+                {4,5}, {5,6}, {6,7}, {7,4},
+                {0,4}, {1,5}, {2,6}, {3,7},
+                {0,2}, {1,3}, // bottom face
+                {4,6}, {5,7}, // top face
+                {0,5}, {1,4}, // rear face
+                {3,6}, {2,7}, // front face
+                {0,7}, {3,4}, // left face
+                {1,6}, {2,5}, // right face
+                {0,6}, {1,7}, {2,4}, {3,5} // body diagonals
+            }};
 
-            // Add nodes
-            auto n0 = world.addNode(topLeft);
-            auto n1 = world.addNode(topRight);
-            auto n2 = world.addNode(bottomLeft);
-            auto n3 = world.addNode(bottomRight);
+            constexpr float stiffness = 650.0f;
+            constexpr float damping = 12.0f;
 
-            // Anchor the bottom-left node
-            world.nodes[n2].fixed = true;
+            for (const auto& [a, b] : connections) {
+                world.addBeam(a, b, stiffness, damping);
+            }
 
-            // Beam properties
-            constexpr float stiffness = 1000.0f;
-            constexpr float damping = 10.0f;
-
-            // Square edges
-            world.addBeam(n0, n1, stiffness, damping);
-            world.addBeam(n1, n3, stiffness, damping);
-            world.addBeam(n3, n2, stiffness, damping);
-            world.addBeam(n2, n0, stiffness, damping);
-
-            // Diagonal supports
-            world.addBeam(n0, n3, stiffness, damping);
-            world.addBeam(n1, n2, stiffness, damping);
-
-            // Enable plastic deformation and fracture
             for (Beam& beam : world.beams) {
                 beam.plasticDeformationEnabled = true;
-
-                beam.yieldStrain = 0.02f;
-                beam.breakStrain = 0.12f;
-                beam.plasticity = 0.5f;
-
+                beam.yieldStrain = 0.06f;
+                beam.breakStrain = 0.30f;
+                beam.plasticity = 0.6f;
                 beam.plasticallyDeformed = false;
                 beam.broken = false;
             }
@@ -81,352 +82,171 @@ int main() {
             return world;
         };
 
-        // =====================================================
-        // INITIALISE WORLD AND RENDERER
-        // =====================================================
-
         PhysicsWorld world = createWorld();
-        Renderer renderer(1000, 700);
-
-        // =====================================================
-        // INPUT STATE
-        // =====================================================
+        Renderer renderer(1200, 800);
 
         bool paused = false;
-
         bool previousSpace = false;
         bool previousR = false;
         bool previousG = false;
+        bool previousF = false;
         bool previousLeft = false;
 
         std::optional<std::size_t> grabbedNode;
-        std::optional<std::size_t> hoveredNode;
-
         Vector3D mouseTarget{0.0f};
-
-        // Mouse dragging spring
         constexpr float mouseStiffness = 500.0f;
-        constexpr float mouseDamping = 30.0f;
+        constexpr float mouseDamping = 35.0f;
 
-        // =====================================================
-        // MOUSE FORCE CALLBACK
-        // =====================================================
-
+        // IMPORTANT: PhysicsWorld::step() must invoke this callback after
+        // resetForces()/applyExternalForces() and before integrate().
         auto applyMouseForce = [&](PhysicsWorld& physics) {
-            if (!grabbedNode) {
-                return;
-            }
-
-            if (*grabbedNode >= physics.nodes.size()) {
-                return;
-            }
-
+            if (!grabbedNode || *grabbedNode >= physics.nodes.size()) return;
             Node& node = physics.nodes[*grabbedNode];
+            if (node.fixed) return;
 
-            if (node.fixed) {
-                return;
+            Vector3D force = mouseStiffness * (mouseTarget - node.position)
+                           - mouseDamping * node.velocity;
+
+            // Protect the explicit spring integrator from extreme mouse pulls.
+            constexpr float maxMouseForce = 1500.0f;
+            const float magnitude = glm::length(force);
+            if (magnitude > maxMouseForce) {
+                force *= maxMouseForce / magnitude;
             }
-
-            Vector3D displacement =
-                mouseTarget - node.position;
-
-            Vector3D dragForce =
-                mouseStiffness * displacement -
-                mouseDamping * node.velocity;
-
-            node.force += dragForce;
+            node.force += force;
         };
 
         world.externalForceCallback = applyMouseForce;
 
-        // =====================================================
-        // FIXED TIMESTEP
-        // =====================================================
-
         constexpr double fixedDt = 1.0 / 240.0;
-
         double previousTime = glfwGetTime();
         double accumulator = 0.0;
+        double lastTitleUpdate = previousTime;
+        std::size_t steps = 0;
 
-        std::size_t physicsSteps = 0;
-
-        std::cout << "SoloPhysics - Structural Damage Test\n";
-        std::cout << "Nodes: " << world.nodes.size()
-                  << " | Beams: " << world.beams.size()
-                  << '\n';
-
-        std::cout << "\nControls:\n";
-        std::cout << "Space        - Pause/resume\n";
-        std::cout << "R            - Reset\n";
-        std::cout << "G            - Toggle gravity\n";
-        std::cout << "Left mouse   - Drag node\n";
-        std::cout << "Middle mouse - Pan camera\n";
-        std::cout << "Mouse wheel  - Zoom\n";
-        std::cout << "Esc          - Exit\n\n";
-
-        // =====================================================
-        // MAIN APPLICATION LOOP
-        // =====================================================
+        std::cout << "SoloPhysics v0.4 - 3D soft-body damage test\n"
+                  << "Nodes: " << world.nodes.size()
+                  << " | Beams: " << world.beams.size() << "\n\n"
+                  << "Left drag  : Grab node\n"
+                  << "Right drag : Orbit camera\n"
+                  << "Middle drag: Pan camera\n"
+                  << "Wheel      : Zoom\n"
+                  << "Space      : Pause / resume\n"
+                  << "R          : Reset\n"
+                  << "G          : Toggle gravity\n"
+                  << "F          : Toggle fixed anchor (node 0)\n"
+                  << "Esc        : Exit\n\n"
+                  << "Start: anchored cube, gravity OFF. Press F, then G for a drop.\n";
 
         while (!renderer.shouldClose()) {
             renderer.pollEvents();
             renderer.updateCamera();
 
-            // =================================================
-            // PAUSE / RESUME
-            // =================================================
-
             bool space = renderer.keyPressed(GLFW_KEY_SPACE);
-
             if (space && !previousSpace) {
                 paused = !paused;
-
-                std::cout
-                    << (paused ? "Paused\n" : "Resumed\n");
+                std::cout << (paused ? "Paused\n" : "Resumed\n");
             }
-
             previousSpace = space;
 
-            // =================================================
-            // RESET SIMULATION
-            // =================================================
-
-            bool r = renderer.keyPressed(GLFW_KEY_R);
-
-            if (r && !previousR) {
+            bool reset = renderer.keyPressed(GLFW_KEY_R);
+            if (reset && !previousR) {
                 world = createWorld();
-
-                // Restore mouse force callback after reset
                 world.externalForceCallback = applyMouseForce;
-
                 grabbedNode.reset();
-                hoveredNode.reset();
-
+                renderer.endDrag();
+                steps = 0;
                 accumulator = 0.0;
-                physicsSteps = 0;
                 paused = false;
-
                 std::cout << "Simulation reset\n";
             }
+            previousR = reset;
 
-            previousR = r;
-
-            // =================================================
-            // TOGGLE GRAVITY
-            // =================================================
-
-            bool g = renderer.keyPressed(GLFW_KEY_G);
-
-            if (g && !previousG) {
-                if (glm::length(world.gravity) > 0.0f) {
-                    world.gravity =
-                        Vector3D{0.0f, 0.0f, 0.0f};
-
-                    std::cout << "Gravity disabled\n";
-                } else {
-                    world.gravity =
-                        Vector3D{0.0f, -9.81f, 0.0f};
-
-                    std::cout << "Gravity enabled\n";
-                }
+            bool gravityKey = renderer.keyPressed(GLFW_KEY_G);
+            if (gravityKey && !previousG) {
+                const bool enabled = glm::length(world.gravity) > 0.0f;
+                world.gravity = enabled ? Vector3D{0.0f, 0.0f, 0.0f}
+                                        : Vector3D{0.0f, -9.81f, 0.0f};
+                std::cout << "Gravity " << (enabled ? "OFF\n" : "ON\n");
             }
+            previousG = gravityKey;
 
-            previousG = g;
-
-            // =================================================
-            // MOUSE POSITION
-            // =================================================
-
-            bool left = renderer.mousePressed(
-                GLFW_MOUSE_BUTTON_LEFT
-            );
-
-            mouseTarget = renderer.mouseWorldPosition();
-
-            // =================================================
-            // HOVERED NODE DETECTION
-            // =================================================
-
-            hoveredNode.reset();
-
-            float hoverDistance = 0.5f;
-
-            for (std::size_t i = 0;
-                 i < world.nodes.size();
-                 ++i) {
-
-                float distance = glm::distance(
-                    world.nodes[i].position,
-                    mouseTarget
-                );
-
-                if (distance < hoverDistance) {
-                    hoverDistance = distance;
-                    hoveredNode = i;
+            bool anchorKey = renderer.keyPressed(GLFW_KEY_F);
+            if (anchorKey && !previousF) {
+                Node& anchor = world.nodes[0];
+                anchor.fixed = !anchor.fixed;
+                if (anchor.fixed) anchor.velocity = Vector3D{0.0f};
+                if (grabbedNode && *grabbedNode == 0) {
+                    grabbedNode.reset();
+                    renderer.endDrag();
                 }
+                std::cout << "Anchor " << (anchor.fixed ? "ON\n" : "OFF\n");
             }
+            previousF = anchorKey;
 
-            // =================================================
-            // NODE PICKING
-            // =================================================
-
+            // Select nodes in screen pixels, not world-space distance.
+            const bool left = renderer.mousePressed(GLFW_MOUSE_BUTTON_LEFT);
+            auto hoveredNode = renderer.pickNode(world, 19.0f);
             if (left && !previousLeft) {
-                grabbedNode.reset();
-
-                float closestDistance = 0.5f;
-
-                for (std::size_t i = 0;
-                     i < world.nodes.size();
-                     ++i) {
-
-                    // Fixed nodes cannot be dragged
-                    if (world.nodes[i].fixed) {
-                        continue;
-                    }
-
-                    float distance = glm::distance(
-                        world.nodes[i].position,
-                        mouseTarget
-                    );
-
-                    if (distance < closestDistance) {
-                        closestDistance = distance;
-                        grabbedNode = i;
-                    }
+                grabbedNode = hoveredNode;
+                if (grabbedNode && world.nodes[*grabbedNode].fixed) {
+                    grabbedNode.reset();
                 }
-
                 if (grabbedNode) {
-                    std::cout
-                        << "Grabbed node: "
-                        << *grabbedNode
-                        << '\n';
+                    renderer.beginDrag(world.nodes[*grabbedNode].position);
+                    mouseTarget = world.nodes[*grabbedNode].position;
+                    std::cout << "Grabbed node " << *grabbedNode << '\n';
                 }
             }
-
-            // Release dragged node
-            if (!left && previousLeft) {
-                if (grabbedNode) {
-                    std::cout
-                        << "Released node: "
-                        << *grabbedNode
-                        << '\n';
+            if (!left) {
+                if (previousLeft && grabbedNode) {
+                    std::cout << "Released node " << *grabbedNode << '\n';
                 }
-
                 grabbedNode.reset();
+                renderer.endDrag();
             }
-
             previousLeft = left;
 
-            // =================================================
-            // PHYSICS TIMING
-            // =================================================
+            if (grabbedNode) {
+                if (auto target = renderer.mouseDragTarget()) mouseTarget = *target;
+            }
 
-            double currentTime = glfwGetTime();
-
-            double frameTime = std::clamp(
-                currentTime - previousTime,
-                0.0,
-                0.1
-            );
-
-            previousTime = currentTime;
+            double now = glfwGetTime();
+            double frameTime = std::clamp(now - previousTime, 0.0, 0.1);
+            previousTime = now;
 
             if (!paused) {
                 accumulator += frameTime;
-
-                // =============================================
-                // FIXED PHYSICS UPDATE
-                // =============================================
-
                 while (accumulator >= fixedDt) {
-                    world.step(
-                        static_cast<float>(fixedDt)
-                    );
-
+                    world.step(static_cast<float>(fixedDt));
                     accumulator -= fixedDt;
-                    ++physicsSteps;
-
-                    // =========================================
-                    // DAMAGE DIAGNOSTICS
-                    // =========================================
-
-                    // Print every 0.5 seconds of simulation time
-                    if (physicsSteps % 120 == 0) {
-                        int plasticCount = 0;
-                        int brokenCount = 0;
-
-                        float maximumStrain = 0.0f;
-
-                        for (const Beam& beam : world.beams) {
-                            if (beam.plasticallyDeformed) {
-                                ++plasticCount;
-                            }
-
-                            if (beam.broken) {
-                                ++brokenCount;
-                            }
-
-                            const Node& a =
-                                world.nodes[beam.nodeA];
-
-                            const Node& b =
-                                world.nodes[beam.nodeB];
-
-                            float currentLength = glm::length(
-                                b.position - a.position
-                            );
-
-                            float strain = std::abs(
-                                (currentLength - beam.restLength) /
-                                beam.restLength
-                            );
-
-                            maximumStrain = std::max(
-                                maximumStrain,
-                                strain
-                            );
-                        }
-
-                        std::cout
-                            << "Time: "
-                            << physicsSteps * fixedDt
-                            << "s"
-                            << " | Max strain: "
-                            << maximumStrain * 100.0f
-                            << "%"
-                            << " | Plastic beams: "
-                            << plasticCount
-                            << " | Broken beams: "
-                            << brokenCount
-                            << '\n';
-                    }
+                    ++steps;
                 }
             } else {
-                // Prevent accumulated simulation time
-                // from building up while paused
                 accumulator = 0.0;
             }
 
-            // =================================================
-            // RENDER WORLD
-            // =================================================
+            if (now - lastTitleUpdate >= 0.25) {
+                std::size_t plastic = 0;
+                std::size_t broken = 0;
+                for (const Beam& beam : world.beams) {
+                    if (beam.plasticallyDeformed) ++plastic;
+                    if (beam.broken) ++broken;
+                }
+                std::ostringstream title;
+                title << "SoloPhysics 3D | " << (paused ? "PAUSED" : "RUNNING")
+                      << " | Gravity " << (glm::length(world.gravity) > 0.0f ? "ON" : "OFF")
+                      << " | Plastic " << plastic << '/' << world.beams.size()
+                      << " | Broken " << broken << '/' << world.beams.size();
+                renderer.setTitle(title.str().c_str());
+                lastTitleUpdate = now;
+            }
 
-            renderer.render(
-                world,
-                grabbedNode,
-                hoveredNode,
-                mouseTarget
-            );
+            renderer.render(world, grabbedNode, hoveredNode, mouseTarget);
         }
-
         return 0;
-
     } catch (const std::exception& e) {
-        std::cerr
-            << "SoloPhysics error: "
-            << e.what()
-            << '\n';
-
+        std::cerr << "SoloPhysics error: " << e.what() << '\n';
         return 1;
     }
 }

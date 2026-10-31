@@ -1,7 +1,8 @@
-
 #pragma once
 
 #include <solophysics/PhysicsWorld.hpp>
+
+#include <glm/mat4x4.hpp>
 
 #include <cstddef>
 #include <optional>
@@ -19,15 +20,20 @@ public:
     Renderer& operator=(const Renderer&) = delete;
 
     bool shouldClose() const;
-
     void pollEvents();
-
     bool keyPressed(int key) const;
     bool mousePressed(int button) const;
+    void setTitle(const char* title);
 
-    Vector3D mouseWorldPosition() const;
-
+    // Right-click orbit, middle-click pan, scroll zoom.
     void updateCamera();
+    std::optional<std::size_t> pickNode(
+        const PhysicsWorld& world, float radiusPixels = 18.0f
+    ) const;
+
+    void beginDrag(const Vector3D& nodePosition);
+    std::optional<Vector3D> mouseDragTarget() const;
+    void endDrag();
 
     void render(
         const PhysicsWorld& world,
@@ -37,33 +43,36 @@ public:
     );
 
 private:
-    GLFWwindow* window = nullptr;
+    struct Ray {
+        Vector3D origin;
+        Vector3D direction;
+    };
 
-    float cameraX = 0.0f;
-    float cameraY = 2.0f;
-    float zoom = 1.0f;
+    GLFWwindow* window = nullptr;
+    unsigned int program = 0;
+    unsigned int vao = 0;
+    unsigned int vbo = 0;
+    int mvpLocation = -1;
+    int roundPointsLocation = -1;
+
+    Vector3D cameraTarget{0.0f, 1.5f, 0.0f};
+    float cameraYaw = 0.75f;
+    float cameraPitch = 0.35f;
+    float cameraDistance = 7.0f;
 
     double previousMouseX = 0.0;
     double previousMouseY = 0.0;
+    bool previousRight = false;
+    bool previousMiddle = false;
 
-    bool wasMiddlePressed = false;
+    bool dragging = false;
+    Vector3D dragPlanePoint{0.0f};
+    Vector3D dragPlaneNormal{0.0f, 0.0f, 1.0f};
 
-    void updateProjection(int width, int height);
-
-    void drawGround(const PhysicsWorld& world);
-    void drawBeams(const PhysicsWorld& world);
-
-    void drawNodes(
-        const PhysicsWorld& world,
-        std::optional<std::size_t> grabbedNode,
-        std::optional<std::size_t> hoveredNode
-    );
-
-    void drawMouseSpring(
-        const PhysicsWorld& world,
-        std::optional<std::size_t> grabbedNode,
-        const Vector3D& mouseTarget
-    );
+    Vector3D cameraPosition() const;
+    glm::mat4 viewMatrix() const;
+    glm::mat4 projectionMatrix() const;
+    std::optional<Ray> cursorRay() const;
 };
 
 } // namespace solophysics
