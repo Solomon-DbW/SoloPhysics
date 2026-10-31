@@ -1,0 +1,3080 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  a4paper,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{DejaVu Sans}
+  \setmonofont[]{DejaVu Sans Mono}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=0.83in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+\babelprovide[main,import]{british}
+\ifPDFTeX
+\else
+\babelfont{rm}[]{DejaVu Sans}
+\fi
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\usepackage{fancyhdr}
+\usepackage{fvextra}
+\usepackage{xcolor}
+\usepackage{microtype}
+\definecolor{soloblue}{HTML}{256897}
+\definecolor{solodark}{HTML}{24374A}
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\color{soloblue}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\large\bfseries\color{solodark}}{\thesubsection}{0.7em}{}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{soloblue}{SoloPhysics | Technical Development Handbook}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\AtBeginDocument{\renewcommand{\arraystretch}{1.16}}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={SoloPhysics: From a Mass-Spring Prototype to a 3D GLAD Renderer},
+  pdfauthor={SoloPhysics development notes},
+  pdflang={en-GB},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{SoloPhysics: From a Mass-Spring Prototype to a 3D GLAD Renderer}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{An Obsidian + LaTeX Development Handbook for a Python
+Programmer Learning C++}
+\author{SoloPhysics development notes}
+\date{31 October 2026}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\section{Project Goals and
+Chronology}\label{project-goals-and-chronology}
+
+\subsection{Motivation}\label{motivation}
+
+SoloPhysics began on \textbf{28 October 2026} with a long-term objective
+of a BeamNG.drive-style deformable vehicle simulator, built
+independently to learn C++, mathematical modelling and engine
+development. The important design decision was to build a
+\textbf{headless physics core first}, verify it numerically, and add
+visualisation only after the results made sense. Inspiration from
+node--beam vehicle physics is supported by
+\href{https://www.beamng.com/game/about/physics/}{BeamNG's official
+explanation}; the present project is an original prototype, not a
+recreation of the full BeamNG solver.
+
+\subsection{Development log --- 28 to 31 October
+2026}\label{development-log-28-to-31-october-2026}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Date
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Milestone
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Evidence / outcome
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{28 Oct} & Select C++20, GLM, CMake, Ninja, Git; headless-first
+node--beam design & Development discussion \\
+\textbf{28--29 Oct} & Create \texttt{Node}, \texttt{Beam},
+\texttt{PhysicsWorld} and gravity / spring forces / integration &
+Reviewed code fragments and user tests \\
+\textbf{29 Oct} & Single suspended mass experiment; vary
+stiffness/damping and plasticity & Equilibrium near \textbf{1.9019 m}
+verified \\
+\textbf{30 Oct} & Four-node, six-beam square dropped onto ground &
+Position and velocity output supplied \\
+\textbf{30 Oct} & Replace small-contact restitution with resting
+threshold & Micro-bounce changed to nearly zero velocity \\
+\textbf{30 Oct} & Add 2D GLFW/OpenGL renderer & User confirmed window
+worked \\
+\textbf{30 Oct} & Add camera controls, pause/reset/gravity toggles,
+mouse-force dragging & User confirmed drag worked \\
+\textbf{30 Oct} & Enable yielding/fracture, highlight nodes and draw
+drag spring & User confirmed interactive damage worked \\
+\textbf{31 Oct} & Replace 2D square with 3D cube, OpenGL 3.3 shaders,
+orbit camera & Source bundle v0.4 verified \\
+\textbf{31 Oct} & Initial 3D GLEW loader failed on user's setup; migrate
+to GLAD 2 & User confirmed GLAD version worked \\
+\end{longtable}
+
+\begin{quote}
+\textbf{Note:} Version labels v0.1--v0.4 are teaching/milestone labels
+used during our development conversations, not a claim about Git tags or
+formal releases. Exact commit IDs for the SoloPhysics project were not
+provided here.
+\end{quote}
+
+\subsection{Why the order mattered}\label{why-the-order-mattered}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flowchart TD}
+\NormalTok{ A[Physics data model] {-}{-}\textgreater{} B[Force accumulation]}
+\NormalTok{ B {-}{-}\textgreater{} C[Time integration]}
+\NormalTok{ C {-}{-}\textgreater{} D[Hanging mass verification]}
+\NormalTok{ D {-}{-}\textgreater{} E[Square + collision]}
+\NormalTok{ E {-}{-}\textgreater{} F[Stable resting contacts]}
+\NormalTok{ F {-}{-}\textgreater{} G[2D live renderer]}
+\NormalTok{ G {-}{-}\textgreater{} H[Interactive input + damage]}
+\NormalTok{ H {-}{-}\textgreater{} I[3D camera + cube]}
+\NormalTok{ I {-}{-}\textgreater{} J[GLAD loader migration]}
+\NormalTok{ J {-}{-}\textgreater{} K[Future vehicle chassis]}
+\end{Highlighting}
+\end{Shaded}
+
+The sequence prevents rendering bugs from being confused with simulation
+bugs. For example, the 2D CLI output already proved the nodes were
+moving before any shaders were written. Likewise, terminal damage counts
+can distinguish physics failure from incorrect beam colouring.
+
+\subsection{Fundamental architectural
+choices}\label{fundamental-architectural-choices}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Simulation is separate from graphics:} the renderer receives a
+  \texttt{const\ PhysicsWorld\&}; it reads state but does not integrate
+  equations.
+\item
+  \textbf{Real units:} positions in metres, masses in kilograms,
+  acceleration in m/s², force in newtons; spring coefficient in N/m,
+  damping in N·s/m.
+\item
+  \textbf{Deterministic-size steps:} \texttt{1/240\ s} in interactive
+  v0.3--v0.4. This is not a claim of fully deterministic cross-platform
+  behaviour.
+\item
+  \textbf{Explicit topology:} beams store \emph{indices}, not owning
+  pointers to nodes, so the world can store nodes in a
+  \texttt{std::vector}.
+\item
+  \textbf{Per-beam failure state:} \texttt{broken} prevents the spring
+  from transmitting force; \texttt{plasticallyDeformed} records
+  historical deformation for display.
+\end{itemize}
+
+\subsection{Roadmap decision log}\label{roadmap-decision-log}
+
+\textbf{Initially chosen:} straightforward mass--spring--damper with
+semi-implicit Euler. \textbf{Deferred:} FEM, XPBD, constrained contacts,
+self-collision, spatial acceleration structures, full vehicle dynamics,
+solver calibration and multithreading. Their absence is an intentional
+scope boundary rather than evidence they are solved.
+
+See 18 - Limits and Future Roadmap and 19 - Bibliography and
+Attribution.
+
+\newpage
+
+\section{Environment, Project Layout and
+Build}\label{environment-project-layout-and-build}
+
+\subsection{Hardware and operating
+environment}\label{hardware-and-operating-environment}
+
+The project is developed on \textbf{SoloLinux}, an Arch-derived Linux
+setup, using a C++20 compiler (\texttt{g++} in the recorded build logs),
+GLFW, GLM, Mesa/OpenGL, CMake, Ninja and later GLAD 2. The user was
+running a Hyprland/Wayland desktop when the GLEW loader problem was
+investigated.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ pacman }\AttributeTok{{-}S} \AttributeTok{{-}{-}needed}\NormalTok{ git python python{-}jinja glfw glm mesa cmake ninja}
+\BuiltInTok{cd}\NormalTok{ \textasciitilde{}/Projects/SoloPhysics}
+\FunctionTok{cmake} \AttributeTok{{-}S}\NormalTok{ . }\AttributeTok{{-}B}\NormalTok{ build{-}glad }\AttributeTok{{-}G}\NormalTok{ Ninja}
+\FunctionTok{cmake} \AttributeTok{{-}{-}build}\NormalTok{ build{-}glad}
+\ExtensionTok{./build{-}glad/solo\_physics}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{sudo\ pacman\ -S\ -\/-needed}: installs only missing packages.
+\item
+  \texttt{cmake\ -S\ .}: source directory is here.
+\item
+  \texttt{-B\ build-glad}: binary/build directory is a separate
+  location.
+\item
+  \texttt{-G\ Ninja}: choose Ninja as the build-system generator.
+\item
+  \texttt{cmake\ -\/-build}: execute that generator with dependency
+  checking.
+\item
+  \texttt{\&\&}: run the next command \textbf{only if the previous
+  command succeeded}; prevents launching a stale executable after a
+  failed compile.
+\end{itemize}
+
+\subsection{File structure}\label{file-structure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{SoloPhysics/}
+\NormalTok{├── CMakeLists.txt}
+\NormalTok{├── include/solophysics/}
+\NormalTok{│   ├── Vector3D.hpp}
+\NormalTok{│   ├── Node.hpp}
+\NormalTok{│   ├── Beam.hpp}
+\NormalTok{│   ├── PhysicsWorld.hpp}
+\NormalTok{│   └── Renderer.hpp}
+\NormalTok{├── src/}
+\NormalTok{│   ├── main.cpp}
+\NormalTok{│   ├── physics/PhysicsWorld.cpp}
+\NormalTok{│   └── rendering/Renderer.cpp}
+\NormalTok{└── build{-}glad/       \# generated; do not edit by hand}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Headers} (\texttt{.hpp}) describe interfaces and shared types.
+\textbf{Implementation files} (\texttt{.cpp}) define functions.
+\texttt{main.cpp} assembles the demo and owns the application loop. A
+larger engine could split tests into a separate target and move the
+engine into a library.
+
+\subsection{Compilation mental model (from Python to
+C++)}\label{compilation-mental-model-from-python-to-c}
+
+Python often imports a module at runtime. C++ typically uses a
+\textbf{preprocessor}, \textbf{compiler}, \textbf{linker}, then a native
+executable:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flowchart LR}
+\NormalTok{ A[main.cpp] {-}{-}\textgreater{} C[C++ compiler]}
+\NormalTok{ B[Renderer.hpp / PhysicsWorld.hpp] {-}{-}\textgreater{} C}
+\NormalTok{ D[Renderer.cpp] {-}{-}\textgreater{} E[C++ compiler]}
+\NormalTok{ F[PhysicsWorld.cpp] {-}{-}\textgreater{} G[C++ compiler]}
+\NormalTok{ C {-}{-}\textgreater{} H[Object files]}
+\NormalTok{ E {-}{-}\textgreater{} H}
+\NormalTok{ G {-}{-}\textgreater{} H}
+\NormalTok{ H {-}{-}\textgreater{} I[Linker]}
+\NormalTok{ J[GLFW / GLAD] {-}{-}\textgreater{} I}
+\NormalTok{ I {-}{-}\textgreater{} K[solo\_physics]}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{\#include\ \textless{}solophysics/Renderer.hpp\textgreater{}}
+effectively makes declarations available to the current translation
+unit. It is \textbf{not} a runtime package import. A missing declaration
+causes a compile error; a declaration without a matching compiled
+definition can cause a linker error.
+
+\subsection{Git safeguards}\label{git-safeguards}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ status }\AttributeTok{{-}{-}short}
+\FunctionTok{git}\NormalTok{ add CMakeLists.txt include src}
+\FunctionTok{git}\NormalTok{ commit }\AttributeTok{{-}m} \StringTok{"Document current working GLAD renderer"}
+\FunctionTok{git}\NormalTok{ log }\AttributeTok{{-}{-}oneline} \AttributeTok{{-}{-}max{-}count}\OperatorTok{=}\NormalTok{10}
+\end{Highlighting}
+\end{Shaded}
+
+These are example commands; the exact history and branch state depend on
+your repository. Commit before replacing generated upgrade files. See 16
+- Errors, Diagnostics and Lessons.
+
+\newpage
+
+\section{C++ for a Python Developer}\label{c-for-a-python-developer}
+
+\subsection{The biggest differences}\label{the-biggest-differences}
+
+C++ is statically typed, compiled ahead of execution, and exposes object
+lifetime, copies, references, pointers, stack/heap allocation and
+generic templates more directly than Python. The SoloPhysics code uses
+\textbf{C++20}, but many constructs predate C++20.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Concept
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Python
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+SoloPhysics C++
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Variable & \texttt{mass\ =\ 1.0} & \texttt{float\ mass\ =\ 1.0f;} \\
+Constant-like binding & \texttt{DT\ =\ 1\ /\ 240} (convention) &
+\texttt{constexpr\ double\ dt\ =\ 1.0\ /\ 240.0;} \\
+Container & \texttt{nodes\ =\ {[}{]}} &
+\texttt{std::vector\textless{}Node\textgreater{}\ nodes;} \\
+Fixed-size collection & \texttt{positions\ =\ (...)} &
+\texttt{std::array\textless{}Vector3D,\ 8\textgreater{}\ positions;} \\
+Optional result & \texttt{None} or index &
+\texttt{std::optional\textless{}std::size\_t\textgreater{}} \\
+Function & \texttt{def\ step(dt):} & \texttt{void\ step(float\ dt);} \\
+Exception & \texttt{raise\ ValueError(...)} &
+\texttt{throw\ std::runtime\_error(...);} \\
+Object attribute & \texttt{node.position} & \texttt{node.position} or
+\texttt{nodePtr-\textgreater{}position} \\
+Module organisation & \texttt{physics\_world.py} &
+\texttt{PhysicsWorld.hpp} + \texttt{PhysicsWorld.cpp} \\
+\end{longtable}
+
+\begin{quote}
+\textbf{Note:} Python analogy limitations Python names usually refer to
+objects; C++ values can be copied by assignment. \texttt{Node\ a\ =\ b;}
+copies \texttt{b}. \texttt{Node\&\ a\ =\ b;} is an alias to \texttt{b}.
+\texttt{Node*\ p\ =\ \&b;} is a pointer containing its address.
+\end{quote}
+
+\subsection{From source to symbols}\label{from-source-to-symbols}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\PreprocessorTok{\#include }\ImportTok{\textless{}glm/geometric.hpp\textgreater{}}
+\KeywordTok{namespace}\NormalTok{ solophysics }\OperatorTok{\{}
+    \KeywordTok{using}\NormalTok{ Vector3D }\OperatorTok{=}\NormalTok{ glm}\OperatorTok{::}\NormalTok{vec3}\OperatorTok{;}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{\#include} tells the preprocessor to make declarations
+  available.
+\item
+  \texttt{namespace\ solophysics\ \{\ ...\ \}} groups symbols, rather
+  like \texttt{solophysics.} names in Python.
+\item
+  \texttt{::} is the \textbf{scope resolution operator}:
+  \texttt{glm::vec3} refers to \texttt{vec3} in namespace \texttt{glm}.
+\item
+  \texttt{using\ Vector3D\ =\ glm::vec3;} defines a type alias,
+  \textbf{not a new class}.
+\item
+  \texttt{;} terminates most statements. \texttt{\{\}} delimit blocks
+  instead of Python indentation.
+\end{itemize}
+
+\subsection{Values, references, const and
+pointers}\label{values-references-const-and-pointers}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DataTypeTok{void}\NormalTok{ inspect}\OperatorTok{(}\AttributeTok{const}\NormalTok{ PhysicsWorld}\OperatorTok{\&}\NormalTok{ world}\OperatorTok{)} \OperatorTok{\{}
+    \AttributeTok{const}\NormalTok{ Node}\OperatorTok{\&}\NormalTok{ a }\OperatorTok{=}\NormalTok{ world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[}\DecValTok{0}\OperatorTok{];}
+    \CommentTok{// a.mass = 5.0f; // ERROR: read{-}only reference}
+\OperatorTok{\}}
+
+\DataTypeTok{void}\NormalTok{ accelerate}\OperatorTok{(}\NormalTok{Node}\OperatorTok{\&}\NormalTok{ node}\OperatorTok{,} \AttributeTok{const}\NormalTok{ Vector3D}\OperatorTok{\&}\NormalTok{ force}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{    node}\OperatorTok{.}\NormalTok{force }\OperatorTok{+=}\NormalTok{ force}\OperatorTok{;} \CommentTok{// changes the original node}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{PhysicsWorld\&\ world} means \textbf{reference} (alias, no
+copy). \texttt{const\ PhysicsWorld\&} makes the accessed object
+read-only from this function. \texttt{Node*\ node} means
+\textbf{pointer}. \texttt{\&node} in an expression takes an address, and
+\texttt{*ptr} dereferences a pointer. The \texttt{*} in
+\texttt{std::optional} dereferences the contained value too, but
+\texttt{optional} is not itself a pointer.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{GLFWwindow}\OperatorTok{*}\NormalTok{ window }\OperatorTok{=} \KeywordTok{nullptr}\OperatorTok{;}
+\NormalTok{glfwMakeContextCurrent}\OperatorTok{(}\NormalTok{window}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{nullptr} is the null-pointer literal; GLFW manages a window
+behind this pointer. \textbf{Never} dereference a null pointer. The
+renderer destroys the GLFW window during cleanup.
+
+\subsection{Aggregates and brace
+initialisation}\label{aggregates-and-brace-initialisation}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Node topLeft}\OperatorTok{;}
+\NormalTok{topLeft}\OperatorTok{.}\NormalTok{position }\OperatorTok{=} \OperatorTok{\{{-}}\FloatTok{0.5}\BuiltInTok{f}\OperatorTok{,} \FloatTok{3.0}\BuiltInTok{f}\OperatorTok{,} \FloatTok{0.0}\BuiltInTok{f}\OperatorTok{\};}
+\NormalTok{topLeft}\OperatorTok{.}\NormalTok{mass }\OperatorTok{=} \FloatTok{1.0}\BuiltInTok{f}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{3.0f} is a \texttt{float} literal, while \texttt{3.0} is usually
+a \texttt{double}. \texttt{\{x,\ y,\ z\}} supplies elements/constructor
+inputs to a GLM vector. \texttt{Vector3D\{0.0f\}} constructs a zero
+vector (as used in the project).
+
+\subsection{Iteration and index types}\label{iteration-and-index-types}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for} \OperatorTok{(}\NormalTok{Beam}\OperatorTok{\&}\NormalTok{ beam }\OperatorTok{:}\NormalTok{ world}\OperatorTok{.}\NormalTok{beams}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{    beam}\OperatorTok{.}\NormalTok{breakStrain }\OperatorTok{=} \FloatTok{0.30}\BuiltInTok{f}\OperatorTok{;}
+\OperatorTok{\}}
+
+\ControlFlowTok{for} \OperatorTok{(}\BuiltInTok{std::}\NormalTok{size\_t i }\OperatorTok{=} \DecValTok{0}\OperatorTok{;}\NormalTok{ i }\OperatorTok{\textless{}}\NormalTok{ world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{.}\NormalTok{size}\OperatorTok{();} \OperatorTok{++}\NormalTok{i}\OperatorTok{)} \OperatorTok{\{}
+    \AttributeTok{const}\NormalTok{ Node}\OperatorTok{\&}\NormalTok{ node }\OperatorTok{=}\NormalTok{ world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[}\NormalTok{i}\OperatorTok{];}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The first is a \textbf{range-based \texttt{for}} (like Python's
+\texttt{for\ beam\ in\ beams}); \texttt{\&} avoids copying each
+\texttt{Beam} and permits mutation. The second is an indexed loop;
+\texttt{std::size\_t} is an unsigned size/index type, \texttt{++i}
+increments it, \texttt{world.nodes{[}i{]}} indexes the vector. The
+\texttt{i} variable exists \textbf{only inside the loop}---the exact
+scope error that appeared in the project's 2D mouse-picking code.
+
+\subsection{Automatic type deduction, templates and structured
+bindings}\label{automatic-type-deduction-templates-and-structured-bindings}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\AttributeTok{const} \BuiltInTok{std::}\NormalTok{array}\OperatorTok{\textless{}}\BuiltInTok{std::}\NormalTok{pair}\OperatorTok{\textless{}}\BuiltInTok{std::}\NormalTok{size\_t}\OperatorTok{,} \BuiltInTok{std::}\NormalTok{size\_t}\OperatorTok{\textgreater{},} \DecValTok{28}\OperatorTok{\textgreater{}}\NormalTok{ connections}\OperatorTok{\{\{}
+    \OperatorTok{\{}\DecValTok{0}\OperatorTok{,} \DecValTok{1}\OperatorTok{\},} \OperatorTok{\{}\DecValTok{1}\OperatorTok{,} \DecValTok{2}\OperatorTok{\}} \CommentTok{/* ... other entries ... */}
+\OperatorTok{\}\};}
+
+\ControlFlowTok{for} \OperatorTok{(}\AttributeTok{const} \KeywordTok{auto}\OperatorTok{\&} \OperatorTok{[}\NormalTok{a}\OperatorTok{,}\NormalTok{ b}\OperatorTok{]} \OperatorTok{:}\NormalTok{ connections}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{    world}\OperatorTok{.}\NormalTok{addBeam}\OperatorTok{(}\NormalTok{a}\OperatorTok{,}\NormalTok{ b}\OperatorTok{,}\NormalTok{ stiffness}\OperatorTok{,}\NormalTok{ damping}\OperatorTok{);}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{std::array\textless{}T,\ N\textgreater{}}: fixed-size sequence
+  with \texttt{N} elements of type \texttt{T}.
+\item
+  \texttt{std::pair\textless{}A,B\textgreater{}}: two-value aggregate,
+  like a typed 2-tuple.
+\item
+  \texttt{auto}: compiler infers the type; unlike Python, the type is
+  still static.
+\item
+  \texttt{const\ auto\&\ {[}a,\ b{]}}: structured binding, unpacking the
+  pair \textbf{without copying the pair}.
+\item
+  \texttt{\textless{}...\textgreater{}}: template arguments, not a
+  less-than comparison in this context.
+\end{itemize}
+
+\subsection{Lambdas and capture
+syntax}\label{lambdas-and-capture-syntax}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{auto}\NormalTok{ createWorld }\OperatorTok{=} \OperatorTok{[]()} \OperatorTok{\{}
+\NormalTok{    PhysicsWorld world}\OperatorTok{;}
+    \ControlFlowTok{return}\NormalTok{ world}\OperatorTok{;}
+\OperatorTok{\};}
+
+\KeywordTok{auto}\NormalTok{ applyMouseForce }\OperatorTok{=} \OperatorTok{[\&](}\NormalTok{PhysicsWorld}\OperatorTok{\&}\NormalTok{ physics}\OperatorTok{)} \OperatorTok{\{}
+    \ControlFlowTok{if} \OperatorTok{(!}\NormalTok{grabbedNode}\OperatorTok{)} \ControlFlowTok{return}\OperatorTok{;}
+\NormalTok{    Node}\OperatorTok{\&}\NormalTok{ node }\OperatorTok{=}\NormalTok{ physics}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[*}\NormalTok{grabbedNode}\OperatorTok{];}
+\NormalTok{    node}\OperatorTok{.}\NormalTok{force }\OperatorTok{+=}\NormalTok{ mouseStiffness }\OperatorTok{*} \OperatorTok{(}\NormalTok{mouseTarget }\OperatorTok{{-}}\NormalTok{ node}\OperatorTok{.}\NormalTok{position}\OperatorTok{)}
+                \OperatorTok{{-}}\NormalTok{ mouseDamping }\OperatorTok{*}\NormalTok{ node}\OperatorTok{.}\NormalTok{velocity}\OperatorTok{;}
+\OperatorTok{\};}
+\end{Highlighting}
+\end{Shaded}
+
+A lambda is an anonymous function (Python \texttt{lambda} analogy, but
+C++ lambdas may contain multiple statements). \texttt{{[}{]}} is the
+capture list. Empty \texttt{{[}{]}}: use no outside local variables.
+\texttt{{[}\&{]}}: capture used enclosing local variables by
+\textbf{reference}. The function body begins after \texttt{\{}.
+\texttt{return} indicates the result; a \texttt{void} lambda has no
+returned value. The user's callback is stored in
+\texttt{std::function\textless{}void(PhysicsWorld\&)\textgreater{}} and
+invoked from the physics timestep. \textbf{Lifetime rule:} captured
+references must remain valid for as long as the callback uses them.
+
+\subsection{Optional values}\label{optional-values}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{std::}\NormalTok{optional}\OperatorTok{\textless{}}\BuiltInTok{std::}\NormalTok{size\_t}\OperatorTok{\textgreater{}}\NormalTok{ grabbedNode}\OperatorTok{;}
+\ControlFlowTok{if} \OperatorTok{(}\NormalTok{grabbedNode}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{    Node}\OperatorTok{\&}\NormalTok{ node }\OperatorTok{=}\NormalTok{ world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[*}\NormalTok{grabbedNode}\OperatorTok{];}
+\OperatorTok{\}}
+\NormalTok{grabbedNode}\OperatorTok{.}\NormalTok{reset}\OperatorTok{();}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{std::optional\textless{}T\textgreater{}} is an explicit `value
+or no value' wrapper, similar to \texttt{int\ \textbar{}\ None} in
+Python typing. \texttt{if\ (grabbedNode)} checks \textbf{presence}, not
+whether the index is nonzero; index \texttt{0} is valid.
+\texttt{*grabbedNode} retrieves it only after checking presence.
+\texttt{.reset()} returns to the empty state.
+
+\subsection{Classes, public/private, constructors and
+cleanup}\label{classes-publicprivate-constructors-and-cleanup}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{ Renderer }\OperatorTok{\{}
+\KeywordTok{public}\OperatorTok{:}
+\NormalTok{    Renderer}\OperatorTok{(}\DataTypeTok{int}\NormalTok{ width}\OperatorTok{,} \DataTypeTok{int}\NormalTok{ height}\OperatorTok{);}
+    \OperatorTok{\textasciitilde{}}\NormalTok{Renderer}\OperatorTok{();}
+\NormalTok{    Renderer}\OperatorTok{(}\AttributeTok{const}\NormalTok{ Renderer}\OperatorTok{\&)} \OperatorTok{=} \KeywordTok{delete}\OperatorTok{;}
+\KeywordTok{private}\OperatorTok{:}
+\NormalTok{    GLFWwindow}\OperatorTok{*}\NormalTok{ window }\OperatorTok{=} \KeywordTok{nullptr}\OperatorTok{;}
+\OperatorTok{\};}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{class} defaults to private members, \texttt{struct} defaults
+  to public members.
+\item
+  \texttt{public:} exposes methods to callers; \texttt{private:} hides
+  implementation details.
+\item
+  \texttt{Renderer(...)} is a \textbf{constructor}, called on object
+  creation.
+\item
+  \texttt{\textasciitilde{}Renderer()} is a \textbf{destructor}, called
+  during destruction.
+\item
+  \texttt{=\ delete} prohibits copying the renderer; two copies owning
+  one GLFW window could double-free GPU/window resources.
+\item
+  RAII (\emph{Resource Acquisition Is Initialization}) ties cleanup to
+  object lifetime. Python has analogous context managers
+  (\texttt{with}), but destruction timing differs.
+\end{itemize}
+
+\subsection{Error handling and
+ownership}\label{error-handling-and-ownership}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{try} \OperatorTok{\{}
+\NormalTok{    Renderer renderer}\OperatorTok{(}\DecValTok{1200}\OperatorTok{,} \DecValTok{800}\OperatorTok{);}
+    \CommentTok{// application loop}
+\OperatorTok{\}} \ControlFlowTok{catch} \OperatorTok{(}\AttributeTok{const} \BuiltInTok{std::}\NormalTok{exception}\OperatorTok{\&}\NormalTok{ e}\OperatorTok{)} \OperatorTok{\{}
+    \BuiltInTok{std::}\NormalTok{cerr }\OperatorTok{\textless{}\textless{}} \StringTok{"SoloPhysics error: "} \OperatorTok{\textless{}\textless{}}\NormalTok{ e}\OperatorTok{.}\NormalTok{what}\OperatorTok{()} \OperatorTok{\textless{}\textless{}} \CharTok{\textquotesingle{}}\SpecialCharTok{\textbackslash{}n}\CharTok{\textquotesingle{}}\OperatorTok{;}
+    \ControlFlowTok{return} \DecValTok{1}\OperatorTok{;}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The \texttt{catch} catches standard-library exception types derived from
+\texttt{std::exception}. \texttt{std::cerr} is the error output stream;
+\texttt{\textless{}\textless{}} inserts text into the stream. Objects
+with automatic lifetime clean up as the exception propagates.
+Constructors must themselves clean up resources they acquired if
+construction throws before completion.
+
+\subsection{Syntax you will meet in the
+renderer}\label{syntax-you-will-meet-in-the-renderer}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Syntax
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Meaning
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{GLenum} / \texttt{GLuint} & OpenGL API-defined integer-like
+types \\
+\texttt{sizeof(Vertex)} & Byte size of a vertex structure \\
+\texttt{offsetof(Vertex,\ colour)} & Byte offset of member
+\texttt{colour} inside \texttt{Vertex} \\
+\texttt{reinterpret\_cast\textless{}void*\textgreater{}(...)} & Explicit
+low-level cast for the OpenGL vertex offset API \\
+\texttt{R"GLSL(\ ...\ )GLSL"} & Raw string literal containing shader
+source \\
+\texttt{const\ char*} & Pointer to a null-terminated character
+sequence \\
+\texttt{static\_cast\textless{}float\textgreater{}(x)} & Explicit
+checked-category conversion, e.g.~\texttt{double} to \texttt{float} \\
+\texttt{std::clamp(x,\ low,\ high)} & Bound value within interval \\
+\texttt{std::nullopt} & Empty optional value \\
+\texttt{\#pragma\ once} & Widely supported header multiple-inclusion
+protection \\
+\texttt{constexpr} & Compile-time evaluable constant when applicable \\
+\end{longtable}
+
+\subsection{Pointer/reference traps for Python
+developers}\label{pointerreference-traps-for-python-developers}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  A reference cannot be reseated after binding.
+  \texttt{Node\&\ a\ =\ nodes{[}0{]}} will always refer to that node
+  object during its lifetime.
+\item
+  \texttt{std::vector} can reallocate on growth, invalidating
+  references/pointers to elements. This is why a beam stores indices,
+  with explicit bounds checks.
+\item
+  \texttt{const} is enforced by the compiler in ordinary code; it isn't
+  a runtime immutable proxy.
+\item
+  Ownership of C pointers to OpenGL/GLFW resources must be managed
+  explicitly; don't assume Python-style garbage collection.
+\item
+  A \texttt{std::function} holding \texttt{{[}\&{]}} captures can create
+  dangling references if its lifetime exceeds those local variables.
+\end{enumerate}
+
+See 20 - C++ Quick Reference for an exam-style sheet and 17 -
+Verification Tests and Exercises for practice.
+
+\newpage
+
+\section{Core Data Model and Source
+Architecture}\label{core-data-model-and-source-architecture}
+
+\subsection{Core model}\label{core-model}
+
+The simulation is a graph: \textbf{nodes are vertices}, and
+\textbf{beams are undirected edges}. Each node has state (mass,
+position, velocity, accumulated force); each beam refers to two node
+indices and describes its constitutive behaviour.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{classDiagram}
+\NormalTok{class Node \{}
+\NormalTok{  +Vector3D position}
+\NormalTok{  +Vector3D velocity}
+\NormalTok{  +Vector3D force}
+\NormalTok{  +float mass}
+\NormalTok{  +bool fixed}
+\NormalTok{\}}
+\NormalTok{class Beam \{}
+\NormalTok{  +size\_t nodeA}
+\NormalTok{  +size\_t nodeB}
+\NormalTok{  +float restLength}
+\NormalTok{  +float stiffness}
+\NormalTok{  +float damping}
+\NormalTok{  +float yieldStrain}
+\NormalTok{  +float breakStrain}
+\NormalTok{  +float plasticity}
+\NormalTok{  +bool broken}
+\NormalTok{  +bool plasticallyDeformed}
+\NormalTok{\}}
+\NormalTok{class PhysicsWorld \{}
+\NormalTok{  +vector\textasciitilde{}Node\textasciitilde{} nodes}
+\NormalTok{  +vector\textasciitilde{}Beam\textasciitilde{} beams}
+\NormalTok{  +Vector3D gravity}
+\NormalTok{  +step(dt)}
+\NormalTok{  +addNode(node)}
+\NormalTok{  +addBeam(a,b,k,c)}
+\NormalTok{\}}
+\NormalTok{class Renderer \{}
+\NormalTok{  +render(world,...)}
+\NormalTok{  +pickNode(world,radius)}
+\NormalTok{  +updateCamera()}
+\NormalTok{\}}
+\NormalTok{PhysicsWorld "1" o{-}{-} "many" Node}
+\NormalTok{PhysicsWorld "1" o{-}{-} "many" Beam}
+\NormalTok{Renderer ..\textgreater{} PhysicsWorld : reads const reference}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{\texorpdfstring{\texttt{Vector3D.hpp}: descriptive
+alias}{Vector3D.hpp: descriptive alias}}\label{vector3d.hpp-descriptive-alias}
+
+Recorded design:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\PreprocessorTok{\#pragma once}
+\PreprocessorTok{\#include }\ImportTok{\textless{}glm/vec3.hpp\textgreater{}}
+\KeywordTok{namespace}\NormalTok{ solophysics }\OperatorTok{\{}
+    \KeywordTok{using}\NormalTok{ Vector3D }\OperatorTok{=}\NormalTok{ glm}\OperatorTok{::}\NormalTok{vec3}\OperatorTok{;}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Interpretation:} \texttt{Vector3D} and \texttt{glm::vec3} denote
+the same underlying type. GLM supplies vector addition, scalar
+multiplication, dot products and lengths. Using an alias makes a future
+math-library replacement easier conceptually, though replacing GLM would
+require more work than just the alias.
+
+\subsection{\texorpdfstring{\texttt{Node.hpp}: mass
+particle}{Node.hpp: mass particle}}\label{node.hpp-mass-particle}
+
+Recorded prototype (illustrative reconstruction of the earlier header):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{struct}\NormalTok{ Node }\OperatorTok{\{}
+\NormalTok{    Vector3D position}\OperatorTok{\{}\FloatTok{0.0}\BuiltInTok{f}\OperatorTok{\};}
+\NormalTok{    Vector3D velocity}\OperatorTok{\{}\FloatTok{0.0}\BuiltInTok{f}\OperatorTok{\};}
+\NormalTok{    Vector3D force}\OperatorTok{\{}\FloatTok{0.0}\BuiltInTok{f}\OperatorTok{\};}
+    \DataTypeTok{float}\NormalTok{ mass }\OperatorTok{=} \FloatTok{1.0}\BuiltInTok{f}\OperatorTok{;}
+    \DataTypeTok{bool}\NormalTok{ fixed }\OperatorTok{=} \KeywordTok{false}\OperatorTok{;}
+\OperatorTok{\};}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Units:} \texttt{position} m, \texttt{velocity} m/s,
+\texttt{force} N, \texttt{mass} kg. A fixed node should not be
+numerically integrated. The \texttt{force} field stores the \textbf{sum
+of forces for the current timestep}, not a permanent applied force.
+
+\subsection{\texorpdfstring{\texttt{Beam.hpp}: connected
+spring/damper}{Beam.hpp: connected spring/damper}}\label{beam.hpp-connected-springdamper}
+
+Recorded interface (field ordering may differ locally):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{struct}\NormalTok{ Beam }\OperatorTok{\{}
+    \BuiltInTok{std::}\NormalTok{size\_t nodeA }\OperatorTok{=} \DecValTok{0}\OperatorTok{;}
+    \BuiltInTok{std::}\NormalTok{size\_t nodeB }\OperatorTok{=} \DecValTok{0}\OperatorTok{;}
+    \DataTypeTok{float}\NormalTok{ restLength }\OperatorTok{=} \FloatTok{0.0}\BuiltInTok{f}\OperatorTok{;}
+    \DataTypeTok{float}\NormalTok{ stiffness }\OperatorTok{=} \FloatTok{1000.0}\BuiltInTok{f}\OperatorTok{;}
+    \DataTypeTok{float}\NormalTok{ damping }\OperatorTok{=} \FloatTok{10.0}\BuiltInTok{f}\OperatorTok{;}
+    \DataTypeTok{float}\NormalTok{ yieldStrain }\OperatorTok{=} \FloatTok{0.15}\BuiltInTok{f}\OperatorTok{;}
+    \DataTypeTok{float}\NormalTok{ breakStrain }\OperatorTok{=} \FloatTok{0.60}\BuiltInTok{f}\OperatorTok{;}
+    \DataTypeTok{float}\NormalTok{ plasticity }\OperatorTok{=} \FloatTok{2.0}\BuiltInTok{f}\OperatorTok{;}
+    \DataTypeTok{bool}\NormalTok{ plasticDeformationEnabled }\OperatorTok{=} \KeywordTok{true}\OperatorTok{;}
+    \DataTypeTok{bool}\NormalTok{ plasticallyDeformed }\OperatorTok{=} \KeywordTok{false}\OperatorTok{;}
+    \DataTypeTok{bool}\NormalTok{ broken }\OperatorTok{=} \KeywordTok{false}\OperatorTok{;}
+\OperatorTok{\};}
+\end{Highlighting}
+\end{Shaded}
+
+The beam has no separate mass or bending DOF. \texttt{nodeA},
+\texttt{nodeB} are \textbf{indices} into \texttt{world.nodes}.
+\texttt{restLength} is the length at which the spring's elastic
+component is zero. Later plastic deformation mutates that value, so
+original-length-based comparisons would require a separate
+original-length field.
+
+\subsection{\texorpdfstring{\texttt{PhysicsWorld}: responsible for one
+step}{PhysicsWorld: responsible for one step}}\label{physicsworld-responsible-for-one-step}
+
+The previously recorded step sequence:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DataTypeTok{void}\NormalTok{ PhysicsWorld}\OperatorTok{::}\NormalTok{step}\OperatorTok{(}\DataTypeTok{float}\NormalTok{ dt}\OperatorTok{)} \OperatorTok{\{}
+    \CommentTok{// timestep validation}
+\NormalTok{    validateState}\OperatorTok{();}
+\NormalTok{    resetForces}\OperatorTok{();}
+\NormalTok{    applyExternalForces}\OperatorTok{();}
+    \ControlFlowTok{if} \OperatorTok{(}\NormalTok{externalForceCallback}\OperatorTok{)}\NormalTok{ externalForceCallback}\OperatorTok{(*}\KeywordTok{this}\OperatorTok{);}
+\NormalTok{    solveBeamForces}\OperatorTok{();}
+\NormalTok{    integrate}\OperatorTok{(}\NormalTok{dt}\OperatorTok{);}
+\NormalTok{    detectAndResolveGroundContacts}\OperatorTok{();}
+\NormalTok{    updateDamage}\OperatorTok{(}\NormalTok{dt}\OperatorTok{);}
+\NormalTok{    validateState}\OperatorTok{();}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+This is a \emph{recorded conceptual sequence}, not a byte-for-byte
+snapshot of the newest local \texttt{PhysicsWorld.cpp}. Its order has
+physical consequences: using forces from the current positions for
+integration; applying ground corrections after integration; and
+evaluating breakage after movement means a breaking beam may still have
+contributed a force during the immediately preceding timestep.
+
+\subsection{Why separate
+responsibilities?}\label{why-separate-responsibilities}
+
+\texttt{main.cpp} constructs a test \textbf{scenario}, processes UI
+events and calls physics/render. \texttt{PhysicsWorld.cpp} evolves the
+physical state. \texttt{Renderer.cpp} converts the latest state to GPU
+draw commands. As a result, the same physics core could be called by
+command-line tests, a 2D renderer, a 3D renderer or (later) a headless
+benchmark.
+
+\textbf{Mental model from Python:} \texttt{PhysicsWorld} is the domain
+model, \texttt{Renderer} is a view, and \texttt{main.cpp} is the
+controller/application entry point. Unlike a typical pure-Python
+application, the C++ declarations, definitions, template instantiations
+and linker all have to agree.
+
+Read alongside source snapshots
+\texttt{Source\ Snapshots/v0.4-GLAD/src/main.cpp} and
+\texttt{.../Renderer.cpp}. See also 05 - Forces and Spring Dynamics and
+15 - CMake Deep Dive.
+
+\newpage
+
+\section{Forces, Springs and Damping}\label{forces-springs-and-damping}
+
+\subsection{Newton's second law}\label{newtons-second-law}
+
+For a node with constant mass \(m\):
+
+\[\sum \mathbf F = m\mathbf a, \qquad \mathbf a=\frac{\sum\mathbf F}{m}.\]
+
+The world starts each timestep by clearing accumulated node forces, then
+adding external and internal forces:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{node}\OperatorTok{.}\NormalTok{force }\OperatorTok{=}\NormalTok{ Vector3D}\OperatorTok{\{}\FloatTok{0.0}\BuiltInTok{f}\OperatorTok{\};}
+\ControlFlowTok{if} \OperatorTok{(!}\NormalTok{node}\OperatorTok{.}\NormalTok{fixed}\OperatorTok{)}\NormalTok{ node}\OperatorTok{.}\NormalTok{force }\OperatorTok{+=}\NormalTok{ node}\OperatorTok{.}\NormalTok{mass }\OperatorTok{*}\NormalTok{ gravity}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+If \(m=1\,\mathrm{kg}\) and \(g_y=-9.81\,\mathrm{m/s^2}\), the
+gravitational force is \(F_y=-9.81\,\mathrm N\). A mass of 2 kg
+experiences \(-19.62\,\mathrm N\), but \emph{the same gravitational
+acceleration} when no other forces apply.
+
+\subsection{The direction of a beam}\label{the-direction-of-a-beam}
+
+For nodes A and B:
+
+\[
+\begin{aligned}
+\mathbf d &= \mathbf x_B-\mathbf x_A,\\
+L &= \lVert\mathbf d\rVert,\\
+\hat{\mathbf d} &= \frac{\mathbf d}{L},\\
+e &= L-L_0.
+\end{aligned}
+\]
+
+Here \(L\) is current length, \(L_0\) is the \textbf{current rest
+length}, and \(e\) is extension in metres. A very small \(L\) must be
+guarded before dividing by it
+(\texttt{if\ (length\ \textless{}\ 1e-6f)\ continue;}).
+
+\subsection{Hooke's law plus axial
+damping}\label{hookes-law-plus-axial-damping}
+
+The force on node \textbf{A} in the project's implementation is
+
+\[
+\boxed{\mathbf F_A=\Big[k(L-L_0)+c\big((\mathbf v_B-\mathbf v_A)\cdot\hat{\mathbf d}\big)\Big]\hat{\mathbf d}}.
+\]
+
+The force on B is \(\mathbf F_B=-\mathbf F_A\) (Newton's third law).
+Positive extension pulls A toward B. If B moves away from A along the
+beam, the damping contribution opposes the relative motion by pulling A
+toward B and B toward A. Verify the sign \emph{relative to the
+endpoint}; changing the sign of damping is a common instability bug.
+
+Recorded logic:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Vector3D delta }\OperatorTok{=}\NormalTok{ b}\OperatorTok{.}\NormalTok{position }\OperatorTok{{-}}\NormalTok{ a}\OperatorTok{.}\NormalTok{position}\OperatorTok{;}
+\DataTypeTok{float}\NormalTok{ length }\OperatorTok{=}\NormalTok{ glm}\OperatorTok{::}\NormalTok{length}\OperatorTok{(}\NormalTok{delta}\OperatorTok{);}
+\ControlFlowTok{if} \OperatorTok{(}\NormalTok{length }\OperatorTok{\textless{}} \FloatTok{1e{-}6}\BuiltInTok{f}\OperatorTok{)} \ControlFlowTok{continue}\OperatorTok{;}
+\NormalTok{Vector3D direction }\OperatorTok{=}\NormalTok{ delta }\OperatorTok{/}\NormalTok{ length}\OperatorTok{;}
+\DataTypeTok{float}\NormalTok{ extension }\OperatorTok{=}\NormalTok{ length }\OperatorTok{{-}}\NormalTok{ beam}\OperatorTok{.}\NormalTok{restLength}\OperatorTok{;}
+\DataTypeTok{float}\NormalTok{ relativeVelocity }\OperatorTok{=}\NormalTok{ glm}\OperatorTok{::}\NormalTok{dot}\OperatorTok{(}\NormalTok{b}\OperatorTok{.}\NormalTok{velocity }\OperatorTok{{-}}\NormalTok{ a}\OperatorTok{.}\NormalTok{velocity}\OperatorTok{,}\NormalTok{ direction}\OperatorTok{);}
+\DataTypeTok{float}\NormalTok{ springForce }\OperatorTok{=}\NormalTok{ beam}\OperatorTok{.}\NormalTok{stiffness }\OperatorTok{*}\NormalTok{ extension}\OperatorTok{;}
+\DataTypeTok{float}\NormalTok{ dampingForce }\OperatorTok{=}\NormalTok{ beam}\OperatorTok{.}\NormalTok{damping }\OperatorTok{*}\NormalTok{ relativeVelocity}\OperatorTok{;}
+\NormalTok{Vector3D force }\OperatorTok{=} \OperatorTok{(}\NormalTok{springForce }\OperatorTok{+}\NormalTok{ dampingForce}\OperatorTok{)} \OperatorTok{*}\NormalTok{ direction}\OperatorTok{;}
+\ControlFlowTok{if} \OperatorTok{(!}\NormalTok{a}\OperatorTok{.}\NormalTok{fixed}\OperatorTok{)}\NormalTok{ a}\OperatorTok{.}\NormalTok{force }\OperatorTok{+=}\NormalTok{ force}\OperatorTok{;}
+\ControlFlowTok{if} \OperatorTok{(!}\NormalTok{b}\OperatorTok{.}\NormalTok{fixed}\OperatorTok{)}\NormalTok{ b}\OperatorTok{.}\NormalTok{force }\OperatorTok{{-}=}\NormalTok{ force}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Units:} \(k\) N/m; \(c\) N·s/m; \(L-L_0\) m; \(\dot L\) m/s;
+both resulting terms are N. These beams transmit \textbf{axial} load
+only, not moments or direct bending. Cross-bracing creates network-level
+resistance to shear.
+
+\subsection{One-dimensional worked
+calculation}\label{one-dimensional-worked-calculation}
+
+Take \(L_0=1.00\) m, \(L=1.03\) m, \(k=1000\) N/m, \(c=10\) N·s/m, and
+\(\dot L=0.2\) m/s:
+
+\[F=k(0.03)+c(0.2)=30+2=32\,\mathrm N.\]
+
+The magnitude is 32 N. Node A experiences \(+32\hat{\mathbf d}\) and
+node B \(-32\hat{\mathbf d}\). If the beam is compressing, extension and
+possibly axial velocity are negative, reversing the sign.
+
+\subsection{Spring energy and damping}\label{spring-energy-and-damping}
+
+An ideal undamped Hookean beam has potential energy:
+
+\[U_s=\tfrac12 k(L-L_0)^2.\]
+
+The axial damper dissipates energy at instantaneous rate
+
+\[P_{d}=-c\dot L^2\le 0,\]
+
+assuming the velocity projection and force signs above. This is a useful
+test for damping implementation. \textbf{Caveat:} node ground clamping,
+plastic changes to rest length and explicit integration alter the simple
+conservative-energy budget.
+
+\subsection{What is not modelled yet?}\label{what-is-not-modelled-yet}
+
+\begin{itemize}
+\tightlist
+\item
+  No rotation or moment constraints at beam endpoints.
+\item
+  No finite cross-section, distributed mass or bending stiffness for a
+  single beam.
+\item
+  No continuous collision detection or self-collision.
+\item
+  No force-calibrated fatigue or crash material model.
+\item
+  No physically derived plastic yield surface; current thresholds are
+  intentionally simplified.
+\end{itemize}
+
+See 09 - Plasticity, Fracture and Damage and 18 - Limits and Future
+Roadmap. \href{https://www.beamng.com/game/about/physics/}{BeamNG's
+node--beam explanation} is useful conceptual background but does not
+imply Solver equivalence.
+
+\newpage
+
+\section{Numerical Integration, Stability and
+Timesteps}\label{numerical-integration-stability-and-timesteps}
+
+\subsection{Continuous versus discrete
+motion}\label{continuous-versus-discrete-motion}
+
+Newton's laws are differential equations:
+
+\[\frac{d\mathbf x}{dt}=\mathbf v,\qquad \frac{d\mathbf v}{dt}=\mathbf a(\mathbf x,\mathbf v,t).\]
+
+The CPU computes states at discrete times \(t_n\). SoloPhysics uses
+\textbf{semi-implicit Euler}, also called symplectic Euler in this
+context:
+
+\[\boxed{\begin{aligned}\mathbf v_{n+1}&=\mathbf v_n+\Delta t\,\mathbf a_n,\\\mathbf x_{n+1}&=\mathbf x_n+\Delta t\,\mathbf v_{n+1}.\end{aligned}}\]
+
+Contrast explicit Euler:
+\(\mathbf x_{n+1}=\mathbf x_n+\Delta t\,\mathbf v_n\). Using the
+\emph{new} velocity for the position step generally behaves better for
+simple oscillators but does \textbf{not} make arbitrarily stiff springs
+stable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Vector3D acceleration }\OperatorTok{=}\NormalTok{ node}\OperatorTok{.}\NormalTok{force }\OperatorTok{/}\NormalTok{ node}\OperatorTok{.}\NormalTok{mass}\OperatorTok{;}
+\NormalTok{node}\OperatorTok{.}\NormalTok{velocity }\OperatorTok{+=}\NormalTok{ acceleration }\OperatorTok{*}\NormalTok{ dt}\OperatorTok{;}
+\NormalTok{node}\OperatorTok{.}\NormalTok{position }\OperatorTok{+=}\NormalTok{ node}\OperatorTok{.}\NormalTok{velocity }\OperatorTok{*}\NormalTok{ dt}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+A \texttt{fixed} node skips these updates. Nonpositive/NaN mass requires
+validation before division.
+
+\subsection{Choosing a small step}\label{choosing-a-small-step}
+
+At \(\Delta t=1/240\) seconds, the simulation attempts 240 updates for
+every simulated second. The single hanging-mass test initially used
+\(1/120\) seconds; the later interactive application used \(1/240\). A
+window rendering at 60 frames per second normally receives about four
+physics steps per frame.
+
+A rough scale for a 1 kg body on a 1000 N/m spring is
+
+\[\omega_n=\sqrt{k/m}=\sqrt{1000}\approx31.62\,\mathrm{rad/s},\]
+
+\[\omega_n\Delta t\approx0.132\quad(240\,\mathrm{Hz}).\]
+
+Small \(\omega_n\Delta t\) generally improves numerical behaviour.
+Coupled beams have multiple vibration modes, so one scalar spring
+estimate is \textbf{not} a proof of overall stability. Damping too high
+can also cause numerical trouble with explicit schemes.
+
+\subsection{The frame-time
+accumulator}\label{the-frame-time-accumulator}
+
+Current v0.4 \texttt{main.cpp} includes:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{constexpr} \DataTypeTok{double}\NormalTok{ fixedDt }\OperatorTok{=} \FloatTok{1.0} \OperatorTok{/} \FloatTok{240.0}\OperatorTok{;}
+\DataTypeTok{double}\NormalTok{ previousTime }\OperatorTok{=}\NormalTok{ glfwGetTime}\OperatorTok{();}
+\DataTypeTok{double}\NormalTok{ accumulator }\OperatorTok{=} \FloatTok{0.0}\OperatorTok{;}
+
+\ControlFlowTok{while} \OperatorTok{(!}\NormalTok{renderer}\OperatorTok{.}\NormalTok{shouldClose}\OperatorTok{())} \OperatorTok{\{}
+    \DataTypeTok{double}\NormalTok{ now }\OperatorTok{=}\NormalTok{ glfwGetTime}\OperatorTok{();}
+    \DataTypeTok{double}\NormalTok{ frameTime }\OperatorTok{=} \BuiltInTok{std::}\NormalTok{clamp}\OperatorTok{(}\NormalTok{now }\OperatorTok{{-}}\NormalTok{ previousTime}\OperatorTok{,} \FloatTok{0.0}\OperatorTok{,} \FloatTok{0.1}\OperatorTok{);}
+\NormalTok{    previousTime }\OperatorTok{=}\NormalTok{ now}\OperatorTok{;}
+\NormalTok{    accumulator }\OperatorTok{+=}\NormalTok{ frameTime}\OperatorTok{;}
+    \ControlFlowTok{while} \OperatorTok{(}\NormalTok{accumulator }\OperatorTok{\textgreater{}=}\NormalTok{ fixedDt}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{        world}\OperatorTok{.}\NormalTok{step}\OperatorTok{(}\KeywordTok{static\_cast}\OperatorTok{\textless{}}\DataTypeTok{float}\OperatorTok{\textgreater{}(}\NormalTok{fixedDt}\OperatorTok{));}
+\NormalTok{        accumulator }\OperatorTok{{-}=}\NormalTok{ fixedDt}\OperatorTok{;}
+    \OperatorTok{\}}
+\NormalTok{    renderer}\OperatorTok{.}\NormalTok{render}\OperatorTok{(}\NormalTok{world}\OperatorTok{,}\NormalTok{ grabbedNode}\OperatorTok{,}\NormalTok{ hoveredNode}\OperatorTok{,}\NormalTok{ mouseTarget}\OperatorTok{);}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+This excerpt omits actual input processing, pause branch, and
+diagnostics for clarity. The \emph{actual} source retains them.
+\texttt{glfwGetTime()} returns elapsed time; \texttt{std::clamp} limits
+a single frame to at most 0.1 s of physics catch-up. That means a
+lengthy stall can cause simulated time to fall behind real elapsed time.
+The accumulator preserves unsimulated fractional time within the chosen
+frame-time cap.
+
+\textbf{Important:} fixed-step does not guarantee fully deterministic
+results across all hardware, floating-point modes or different
+input-event timings. The app currently samples mouse input once per
+render loop; it does not record/replay a timestamped input stream.
+
+\subsection{Critical damping and
+oscillations}\label{critical-damping-and-oscillations}
+
+For an isolated 1D mass--spring--damper:
+
+\[m\ddot x+c\dot x+kx=0,\]
+
+\[\omega_n=\sqrt{\frac{k}{m}},\qquad c_{crit}=2\sqrt{km},\qquad\zeta=\frac{c}{2\sqrt{km}}.\]
+
+\begin{itemize}
+\tightlist
+\item
+  \(\zeta<1\): underdamped, oscillates while decaying.
+\item
+  \(\zeta=1\): critically damped in the \emph{ideal isolated system}.
+\item
+  \(\zeta>1\): overdamped.
+\end{itemize}
+
+For \(m=1\) kg, \(k=100\) N/m, \(c_{crit}=20\) N·s/m. With \(c=5\),
+\(\zeta=0.25\); with \(c=0.6\), \(\zeta=0.03\). These idealised formulas
+are excellent for validating the hanging-mass test but don't transfer
+directly to every mode of a 28-beam network.
+
+\subsection{Numerical checklist}\label{numerical-checklist}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Validate finite and positive masses and finite positions/velocities.
+\item
+  Avoid normalising zero-length beams.
+\item
+  Monitor maximum speed/force/strain if nodes explode or vanish.
+\item
+  Apply forces \textbf{after} resetting accumulators.
+\item
+  Ensure each action uses a known fixed \(\Delta t\).
+\item
+  Use controlled tests with known answers before a complex vehicle.
+\end{enumerate}
+
+Additional reading: Glenn Fiedler,
+\href{https://gafferongames.com/post/fix_your_timestep/}{Fix Your
+Timestep!}. See 07 - The Hanging Mass Experiment.
+
+\newpage
+
+\section{First Verification: Suspended
+Mass}\label{first-verification-suspended-mass}
+
+\subsection{Experiment design}\label{experiment-design}
+
+The first successful validation used a \textbf{single 1 kg mass}
+suspended from a fixed anchor at \(y=3\) m by a beam of initial length
+\(L_0=1\) m, stiffness \(k=100\) N/m and damping initially about \(5\)
+N·s/m. Gravity pointed down with magnitude \(9.81\) m/s².
+
+\begin{verbatim}
+Anchor at y=3.0000 m   [fixed]
+            |
+            | beam, L0=1 m
+            |
+Mass initially y=2.0000 m [1 kg]
+            ↓ gravity
+\end{verbatim}
+
+\subsection{\texorpdfstring{Predict the resting height \emph{before}
+simulation}{Predict the resting height before simulation}}\label{predict-the-resting-height-before-simulation}
+
+At equilibrium, the spring must exert \(mg=9.81\) N upward. The spring
+therefore extends by
+
+\[\Delta L=\frac{mg}{k}=\frac{1\times9.81}{100}=0.0981\,\mathrm m.\]
+
+Its settled length is \(L=1.0981\) m. Because the mass is suspended
+below the anchor,
+
+\[\boxed{y_{eq}=3.0-1.0981=1.9019\,\mathrm m}.\]
+
+The actual CLI output converged to approximately \textbf{1.9019 m},
+matching this prediction at the reported precision. This gave initial
+evidence that gravity, axial spring direction and integration were
+coherently implemented.
+
+\subsection{Damping experiment}\label{damping-experiment}
+
+Keeping \(m=1\), \(k=100\) and changing damping from roughly \(c=5\) to
+\(c=0.6\) caused oscillations to persist longer, as expected from
+\(\zeta=c/(2\sqrt{km})\). A key experimental precaution was to disable
+plastic deformation (\texttt{plasticDeformationEnabled=false}) and raise
+\texttt{breakStrain} so the spring's rest length would not change during
+this elastic baseline test.
+
+\begin{quote}
+\textbf{Note:} Why this is a strong engineering test A test is most
+useful when you can calculate an expected result without relying on the
+program. Otherwise, incorrect code may still draw a convincing
+animation.
+\end{quote}
+
+\subsection{Lessons recorded}\label{lessons-recorded}
+
+\begin{itemize}
+\tightlist
+\item
+  Be sure to save \texttt{main.cpp} before rebuilding; an earlier test
+  accidentally ran with unchanged source and misleadingly similar
+  output.
+\item
+  Print damping, stiffness, plasticity state and rest length alongside
+  results.
+\item
+  Compare analytical equilibrium, not just whether a mass visually stops
+  moving.
+\item
+  Damping should affect oscillatory transient behaviour, not ideal
+  static equilibrium while rest length is fixed.
+\end{itemize}
+
+\subsection{Suggested regression
+assertion}\label{suggested-regression-assertion}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// Illustrative test only: assumes you set up the above world and}
+\CommentTok{// run it long enough to settle without plasticity.}
+\AttributeTok{const} \DataTypeTok{float}\NormalTok{ expectedY }\OperatorTok{=} \FloatTok{1.9019}\BuiltInTok{f}\OperatorTok{;}
+\AttributeTok{const} \DataTypeTok{float}\NormalTok{ tolerance }\OperatorTok{=} \FloatTok{0.003}\BuiltInTok{f}\OperatorTok{;}
+\OtherTok{assert}\OperatorTok{(}\BuiltInTok{std::}\NormalTok{abs}\OperatorTok{(}\NormalTok{world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[}\NormalTok{massNodeIndex}\OperatorTok{].}\NormalTok{position}\OperatorTok{.}\NormalTok{y }\OperatorTok{{-}}\NormalTok{ expectedY}\OperatorTok{)} \OperatorTok{\textless{}}\NormalTok{ tolerance}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+This illustrative assertion is not an existing project test. It shows
+how to automate the observation. See 17 - Verification Tests and
+Exercises.
+
+\newpage
+
+\section{Square Drop, Impact and Resting-Contact
+Fix}\label{square-drop-impact-and-resting-contact-fix}
+
+\subsection{From one spring to a connected
+structure}\label{from-one-spring-to-a-connected-structure}
+
+The 2D test replaced the suspended node with four nodes placed in the XY
+plane:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Node & Initial position (m) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0, top left & \((-0.5,3,0)\) \\
+1, top right & \((0.5,3,0)\) \\
+2, bottom left & \((-0.5,2,0)\) \\
+3, bottom right & \((0.5,2,0)\) \\
+\end{longtable}
+
+Six beams connected four perimeter edges and two crossing diagonals.
+Diagonal cross-bracing stops the square becoming an unconstrained
+pin-jointed parallelogram. With \(k=1000\) N/m, \(c=10\) N·s/m and each
+node of mass 1 kg, the shape began falling from rest.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flowchart TB}
+\NormalTok{ A((0)) {-}{-}{-} B((1))}
+\NormalTok{ A {-}{-}{-} C((2))}
+\NormalTok{ B {-}{-}{-} D((3))}
+\NormalTok{ C {-}{-}{-} D}
+\NormalTok{ A {-}{-}{-} D}
+\NormalTok{ B {-}{-}{-} C}
+\end{Highlighting}
+\end{Shaded}
+
+(The diagram is connectivity, not the actual screen positions.)
+
+\subsection{Baseline free fall}\label{baseline-free-fall}
+
+Before contact, all four nodes experienced almost identical downward
+motion. At \(t=0.25\) s, the reported speed was approximately
+\(v_y=-2.4525\) m/s, matching \(-gt=-9.81\times0.25\).
+
+At \(t=0.50\) s, \(v_y=-4.9050\) m/s and bottom nodes were at
+\(y=0.7635\) m. These are valuable baseline checks: internal beams
+should not create a net external force on an initially undeformed freely
+falling assembly.
+
+The bottom starts at 2 m, so continuous ideal free-fall predicts first
+contact near
+
+\[t_{impact}=\sqrt{2h/g}=\sqrt{4/9.81}\approx0.639\,\mathrm s.\]
+
+The logged data at 0.75 s already showed impact, rebound and
+compression.
+
+\subsection{The micro-bouncing bug}\label{the-micro-bouncing-bug}
+
+The original ground solver clamped below-ground positions to \(y=0\) and
+multiplied downward velocity by a restitution coefficient. At rest,
+gravity repeatedly caused tiny penetration; the solver repeatedly
+reversed velocity. Earlier results showed bottom nodes at \(y=0\) but
+with persistent \(v_y\approx+0.0136\) m/s. That is an \textbf{artefact}
+of the contact correction, not physical perpetual bouncing.
+
+A simple resting threshold was introduced:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{constexpr} \DataTypeTok{float}\NormalTok{ restingVelocityThreshold }\OperatorTok{=} \FloatTok{0.2}\BuiltInTok{f}\OperatorTok{;}
+\ControlFlowTok{if} \OperatorTok{(}\NormalTok{node}\OperatorTok{.}\NormalTok{position}\OperatorTok{.}\NormalTok{y }\OperatorTok{\textless{}}\NormalTok{ groundY}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{    node}\OperatorTok{.}\NormalTok{position}\OperatorTok{.}\NormalTok{y }\OperatorTok{=}\NormalTok{ groundY}\OperatorTok{;}
+    \ControlFlowTok{if} \OperatorTok{(}\NormalTok{node}\OperatorTok{.}\NormalTok{velocity}\OperatorTok{.}\NormalTok{y }\OperatorTok{\textless{}} \FloatTok{0.0}\BuiltInTok{f}\OperatorTok{)} \OperatorTok{\{}
+        \DataTypeTok{float}\NormalTok{ impactSpeed }\OperatorTok{=} \OperatorTok{{-}}\NormalTok{node}\OperatorTok{.}\NormalTok{velocity}\OperatorTok{.}\NormalTok{y}\OperatorTok{;}
+\NormalTok{        node}\OperatorTok{.}\NormalTok{velocity}\OperatorTok{.}\NormalTok{y }\OperatorTok{=}\NormalTok{ impactSpeed }\OperatorTok{\textless{}}\NormalTok{ restingVelocityThreshold}
+                        \OperatorTok{?} \FloatTok{0.0}\BuiltInTok{f}
+                        \OperatorTok{:} \OperatorTok{{-}}\NormalTok{node}\OperatorTok{.}\NormalTok{velocity}\OperatorTok{.}\NormalTok{y }\OperatorTok{*}\NormalTok{ restitution}\OperatorTok{;}
+    \OperatorTok{\}}
+\NormalTok{    node}\OperatorTok{.}\NormalTok{velocity}\OperatorTok{.}\NormalTok{x }\OperatorTok{*=} \OperatorTok{(}\FloatTok{1.0}\BuiltInTok{f} \OperatorTok{{-}}\NormalTok{ friction}\OperatorTok{);}
+\NormalTok{    node}\OperatorTok{.}\NormalTok{velocity}\OperatorTok{.}\NormalTok{z }\OperatorTok{*=} \OperatorTok{(}\FloatTok{1.0}\BuiltInTok{f} \OperatorTok{{-}}\NormalTok{ friction}\OperatorTok{);}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The displayed post-fix results settled to bottom \(y=0\), \(v_y=0\) (at
+print precision) and upper \(y\approx0.9926\) m by approximately 2.5 s.
+This was successful for the test.
+
+\begin{quote}
+\textbf{Note:} Not a physically complete contact solver This is a
+position clamp and velocity heuristic. It does not compute persistent
+normal impulses, static friction constraints, or continuous collision
+detection. Multiplying tangential velocity by \texttt{(1\ -\ friction)}
+each contact step is framerate/step-dependent and not Coulomb friction.
+Do not treat it as a production crash solver.
+\end{quote}
+
+\subsection{Why the final upper height was below 1
+m}\label{why-the-final-upper-height-was-below-1-m}
+
+At rest, the bottom row sits at \(y=0\) while the upper row is around
+\(0.9926\) m, slightly lower than the square's original 1 m height. The
+network's axial springs are carrying gravitational loads and
+compressing. The exact load distribution depends on beam topology and
+constraints, so do not apply the single-hanging-mass formula blindly to
+the square.
+
+This experiment validated a multi-node topology, elastic loads, impact
+response and the importance of separating numerical artefacts from
+genuine material behaviour.
+
+\newpage
+
+\section{Plastic Deformation, Fracture and Damage
+Flags}\label{plastic-deformation-fracture-and-damage-flags}
+
+\subsection{The three regimes}\label{the-three-regimes}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Elastic:} beam stretches/compresses then returns toward its
+  rest length when the load disappears.
+\item
+  \textbf{Plastic:} beam's rest length itself changes; deformation
+  persists when forces stop.
+\item
+  \textbf{Fractured:} beam is marked broken and its force contribution
+  is skipped thereafter.
+\end{enumerate}
+
+SoloPhysics implements a simplified \textbf{strain-threshold} model. For
+current length \(L\) and current rest length \(L_0\),
+
+\[\varepsilon=\frac{L-L_0}{L_0},\qquad \varepsilon_{abs}=|\varepsilon|.\]
+
+When \(|\varepsilon|\ge\varepsilon_{break}\), \texttt{beam.broken=true}.
+Otherwise, if plastic deformation is enabled and
+\(|\varepsilon|>\varepsilon_y\), the code gradually moves \(L_0\) toward
+a yield-boundary length.
+
+\subsection{Recorded plastic update}\label{recorded-plastic-update}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DataTypeTok{float}\NormalTok{ factor }\OperatorTok{=} \BuiltInTok{std::}\NormalTok{clamp}\OperatorTok{(}\NormalTok{beam}\OperatorTok{.}\NormalTok{plasticity }\OperatorTok{*}\NormalTok{ dt}\OperatorTok{,} \FloatTok{0.0}\BuiltInTok{f}\OperatorTok{,} \FloatTok{1.0}\BuiltInTok{f}\OperatorTok{);}
+\DataTypeTok{float}\NormalTok{ yieldBoundary }\OperatorTok{=}\NormalTok{ beam}\OperatorTok{.}\NormalTok{restLength }\OperatorTok{*}
+    \OperatorTok{(}\FloatTok{1.0}\BuiltInTok{f} \OperatorTok{+} \BuiltInTok{std::}\NormalTok{copysign}\OperatorTok{(}\NormalTok{beam}\OperatorTok{.}\NormalTok{yieldStrain}\OperatorTok{,}\NormalTok{ strain}\OperatorTok{));}
+\DataTypeTok{float}\NormalTok{ excess }\OperatorTok{=}\NormalTok{ length }\OperatorTok{{-}}\NormalTok{ yieldBoundary}\OperatorTok{;}
+\DataTypeTok{float}\NormalTok{ oldRestLength }\OperatorTok{=}\NormalTok{ beam}\OperatorTok{.}\NormalTok{restLength}\OperatorTok{;}
+\NormalTok{beam}\OperatorTok{.}\NormalTok{restLength }\OperatorTok{+=}\NormalTok{ excess }\OperatorTok{*}\NormalTok{ factor}\OperatorTok{;}
+\NormalTok{beam}\OperatorTok{.}\NormalTok{restLength }\OperatorTok{=} \BuiltInTok{std::}\NormalTok{max}\OperatorTok{(}\NormalTok{beam}\OperatorTok{.}\NormalTok{restLength}\OperatorTok{,} \FloatTok{1e{-}6}\BuiltInTok{f}\OperatorTok{);}
+\ControlFlowTok{if} \OperatorTok{(}\BuiltInTok{std::}\NormalTok{abs}\OperatorTok{(}\NormalTok{beam}\OperatorTok{.}\NormalTok{restLength }\OperatorTok{{-}}\NormalTok{ oldRestLength}\OperatorTok{)} \OperatorTok{\textgreater{}} \FloatTok{1e{-}7}\BuiltInTok{f}\OperatorTok{)}
+\NormalTok{    beam}\OperatorTok{.}\NormalTok{plasticallyDeformed }\OperatorTok{=} \KeywordTok{true}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+This is a simplification recorded during the earlier 2D implementation;
+verify the newest \texttt{PhysicsWorld.cpp} before changing it.
+\texttt{std::copysign} keeps tension and compression yield boundaries on
+the appropriate side of zero strain. \texttt{std::clamp} limits how far
+the rest length can move during one step.
+
+\subsection{Important limitation: moving strain
+reference}\label{important-limitation-moving-strain-reference}
+
+Because strain is divided by \textbf{the updated rest length}, yielding
+can reduce current strain and can postpone fracture during slow pulling.
+A more rigorous model should distinguish:
+
+\[\varepsilon_{total}=\frac{L-L_{original}}{L_{original}},\qquad
+\varepsilon_{elastic}=\frac{L-L_{plastic\,rest}}{L_{plastic\,rest}}\]
+
+and track a history variable for accumulated plastic strain, damage or
+dissipated plastic work. A stress/force-based yield model and material
+calibration would be better for vehicle physics.
+
+\subsection{Actual v0.4 demonstration
+parameters}\label{actual-v0.4-demonstration-parameters}
+
+From the checked 3D \texttt{src/main.cpp} bundle:
+
+\begin{longtable}[]{@{}lrl@{}}
+\toprule\noalign{}
+Variable & Demo setting & Purpose \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{stiffness} & 650 N/m & Elastic axial response \\
+\texttt{damping} & 12 N·s/m & Axial viscous damping \\
+\texttt{yieldStrain} & 0.06 & Plastic update triggers above 6\% \\
+\texttt{breakStrain} & 0.30 & Beam fractures above 30\% current-rest
+strain \\
+\texttt{plasticity} & 0.6 & Rest-length adaptation rate \\
+\texttt{mouseStiffness} & 500 N/m & User's virtual drag spring \\
+\texttt{mouseDamping} & 35 N·s/m & Drag force damper \\
+\texttt{maxMouseForce} & 1500 N & Clamp for large mouse pulls \\
+\end{longtable}
+
+These \textbf{aren't validated properties of steel, aluminium or vehicle
+parts}; they were chosen for an interactive demo.
+
+\subsection{Colours and state
+priority}\label{colours-and-state-priority}
+
+The GLAD renderer uses green for near rest length, blue for compression,
+red for extension, orange for a plastically deformed beam, and grey for
+broken. Plastic history takes priority over current elastic strain (so
+an orange beam can also currently be stretched or compressed). Broken
+beams are still drawn as grey straight lines between endpoints
+\textbf{for debugging}, not as dangling fragments.
+
+\subsection{First damage debugging
+incident}\label{first-damage-debugging-incident}
+
+At one point, the square visibly responded to dragging but never yielded
+or broke because \texttt{main.cpp} still contained:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beam}\OperatorTok{.}\NormalTok{plasticDeformationEnabled }\OperatorTok{=} \KeywordTok{false}\OperatorTok{;}
+\NormalTok{beam}\OperatorTok{.}\NormalTok{breakStrain }\OperatorTok{=} \FloatTok{100.0}\BuiltInTok{f}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+The fix was to enable yielding, set feasible demonstration thresholds,
+anchor one node to force actual structural strain, and print
+\texttt{Plastic\ beams}/\texttt{Broken\ beams} alongside maximum strain.
+The user later confirmed the complete interactive damage test worked.
+
+See 16 - Errors, Diagnostics and Lessons and 18 - Limits and Future
+Roadmap.
+
+\newpage
+
+\section{The First 2D GLFW/OpenGL
+Renderer}\label{the-first-2d-glfwopengl-renderer}
+
+\subsection{Why add graphics only after headless
+tests?}\label{why-add-graphics-only-after-headless-tests}
+
+The CLI square-drop already produced useful positions and velocities. A
+renderer made the dynamics understandable visually, but it shouldn't
+change the physics results. The first GLFW version received
+\texttt{const\ PhysicsWorld\&} and used an \textbf{orthographic XY
+projection} of a 3D physics state.
+
+\subsection{Basic GLFW lifecycle}\label{basic-glfw-lifecycle}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if} \OperatorTok{(!}\NormalTok{glfwInit}\OperatorTok{())} \ControlFlowTok{throw} \BuiltInTok{std::}\NormalTok{runtime\_error}\OperatorTok{(}\StringTok{"GLFW init failed"}\OperatorTok{);}
+\NormalTok{GLFWwindow}\OperatorTok{*}\NormalTok{ window }\OperatorTok{=}\NormalTok{ glfwCreateWindow}\OperatorTok{(}\DecValTok{1000}\OperatorTok{,} \DecValTok{700}\OperatorTok{,} \StringTok{"SoloPhysics"}\OperatorTok{,} \KeywordTok{nullptr}\OperatorTok{,} \KeywordTok{nullptr}\OperatorTok{);}
+\ControlFlowTok{if} \OperatorTok{(!}\NormalTok{window}\OperatorTok{)} \ControlFlowTok{throw} \BuiltInTok{std::}\NormalTok{runtime\_error}\OperatorTok{(}\StringTok{"Window creation failed"}\OperatorTok{);}
+\NormalTok{glfwMakeContextCurrent}\OperatorTok{(}\NormalTok{window}\OperatorTok{);}
+\NormalTok{glfwSwapInterval}\OperatorTok{(}\DecValTok{1}\OperatorTok{);}
+\ControlFlowTok{while} \OperatorTok{(!}\NormalTok{glfwWindowShouldClose}\OperatorTok{(}\NormalTok{window}\OperatorTok{))} \OperatorTok{\{}
+\NormalTok{    glfwPollEvents}\OperatorTok{();}
+    \CommentTok{// step physics and draw}
+\NormalTok{    glfwSwapBuffers}\OperatorTok{(}\NormalTok{window}\OperatorTok{);}
+\OperatorTok{\}}
+\NormalTok{glfwDestroyWindow}\OperatorTok{(}\NormalTok{window}\OperatorTok{);}
+\NormalTok{glfwTerminate}\OperatorTok{();}
+\end{Highlighting}
+\end{Shaded}
+
+This is an illustrative lifecycle excerpt, \textbf{not} the complete
+current code. GLFW creates native windows and OpenGL contexts; it does
+not itself implement the physics engine or GPU shaders.
+\texttt{glfwSwapInterval(1)} requests vsync; actual frame rate depends
+on environment.
+
+\subsection{Legacy OpenGL prototype}\label{legacy-opengl-prototype}
+
+The original \texttt{Renderer.cpp} used a requested \textbf{OpenGL 2.1
+compatibility context}, \texttt{glBegin(GL\_LINES)},
+\texttt{glVertex2f(...)}, \texttt{glEnd()}, \texttt{glMatrixMode}, and
+\texttt{glOrtho}. This was an intentionally short teaching step, not the
+final architecture. Each frame drew:
+
+\begin{itemize}
+\tightlist
+\item
+  ground line;
+\item
+  all unbroken beams as coloured segments;
+\item
+  nodes as points.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{glBegin}\OperatorTok{(}\NormalTok{GL\_LINES}\OperatorTok{);}
+\ControlFlowTok{for} \OperatorTok{(}\AttributeTok{const}\NormalTok{ Beam}\OperatorTok{\&}\NormalTok{ beam }\OperatorTok{:}\NormalTok{ world}\OperatorTok{.}\NormalTok{beams}\OperatorTok{)} \OperatorTok{\{}
+    \ControlFlowTok{if} \OperatorTok{(}\NormalTok{beam}\OperatorTok{.}\NormalTok{broken}\OperatorTok{)} \ControlFlowTok{continue}\OperatorTok{;}
+    \AttributeTok{const}\NormalTok{ Node}\OperatorTok{\&}\NormalTok{ a }\OperatorTok{=}\NormalTok{ world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[}\NormalTok{beam}\OperatorTok{.}\NormalTok{nodeA}\OperatorTok{];}
+    \AttributeTok{const}\NormalTok{ Node}\OperatorTok{\&}\NormalTok{ b }\OperatorTok{=}\NormalTok{ world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[}\NormalTok{beam}\OperatorTok{.}\NormalTok{nodeB}\OperatorTok{];}
+\NormalTok{    glVertex2f}\OperatorTok{(}\NormalTok{a}\OperatorTok{.}\NormalTok{position}\OperatorTok{.}\NormalTok{x}\OperatorTok{,}\NormalTok{ a}\OperatorTok{.}\NormalTok{position}\OperatorTok{.}\NormalTok{y}\OperatorTok{);}
+\NormalTok{    glVertex2f}\OperatorTok{(}\NormalTok{b}\OperatorTok{.}\NormalTok{position}\OperatorTok{.}\NormalTok{x}\OperatorTok{,}\NormalTok{ b}\OperatorTok{.}\NormalTok{position}\OperatorTok{.}\NormalTok{y}\OperatorTok{);}
+\OperatorTok{\}}
+\NormalTok{glEnd}\OperatorTok{();}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Syntax:} \texttt{glBegin} and \texttt{glEnd} are function calls.
+\texttt{GL\_LINES} is a named API constant. The
+\texttt{for\ (const\ Beam\&\ beam\ :\ ...)} loop accesses each beam by
+read-only reference. The renderer reads node positions and translates
+them into screen geometry.
+
+\subsection{The early screen-space/world-space
+trap}\label{the-early-screen-spaceworld-space-trap}
+
+World position \(x,y\) is measured in metres; mouse location is measured
+in window pixels. A screen-centred orthographic camera with vertical
+span \(H\) converts cursor coordinates approximately as:
+
+\[x_w=x_c+\left(2\frac{x_p}{W}-1\right)\frac{H}{2}\frac{W}{H_{pixel}},\]
+
+\[y_w=y_c+\left(1-2\frac{y_p}{H_{pixel}}\right)\frac{H}{2}.\]
+
+The actual prototype also handled framebuffer size separately from
+window size for scaling on HiDPI setups. Its zoom and panning affected
+the mapping.
+
+\subsection{Why replace the renderer?}\label{why-replace-the-renderer}
+
+Modern OpenGL core profiles intentionally omit legacy immediate-mode
+drawing calls. Moving to OpenGL 3.3 shaders and vertex buffers makes the
+engine more portable to modern contexts and introduces the GPU pipeline
+required for larger meshes and later vehicle rendering.
+
+See 13 - Modern OpenGL and GLSL and
+\href{https://www.glfw.org/docs/latest/quick_guide.html}{GLFW's official
+getting-started guide}.
+
+\newpage
+
+\section{Interactive Controls, Picking and Mouse
+Springs}\label{interactive-controls-picking-and-mouse-springs}
+
+\subsection{The problem: force accumulators were
+reset}\label{the-problem-force-accumulators-were-reset}
+
+The first drag attempt failed because the application added forces at
+the wrong point in the update sequence. Each
+\texttt{PhysicsWorld::step()} begins by setting all \texttt{node.force}
+fields to zero. If \texttt{main.cpp} writes \texttt{node.force\ +=\ ...}
+\textbf{before} \texttt{step()}, that force disappears on the very next
+reset.
+
+\textbf{Solution:} \texttt{PhysicsWorld} exposes an
+\texttt{externalForceCallback} invoked \textbf{after} resetting forces
+and applying gravity but \textbf{before} solving beams and integrating.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// Recorded interface}
+\BuiltInTok{std::}\NormalTok{function}\OperatorTok{\textless{}}\DataTypeTok{void}\OperatorTok{(}\NormalTok{PhysicsWorld}\OperatorTok{\&)\textgreater{}}\NormalTok{ externalForceCallback}\OperatorTok{;}
+
+\CommentTok{// In step() (illustrative excerpt)}
+\NormalTok{resetForces}\OperatorTok{();}
+\NormalTok{applyExternalForces}\OperatorTok{();}
+\ControlFlowTok{if} \OperatorTok{(}\NormalTok{externalForceCallback}\OperatorTok{)}\NormalTok{ externalForceCallback}\OperatorTok{(*}\KeywordTok{this}\OperatorTok{);}
+\NormalTok{solveBeamForces}\OperatorTok{();}
+\NormalTok{integrate}\OperatorTok{(}\NormalTok{dt}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{std::function\textless{}void(PhysicsWorld\&)\textgreater{}}
+means: an object callable with one mutable \texttt{PhysicsWorld\&} and
+returning \texttt{void}. Python analogy: a stored callable attribute
+such as \texttt{world.external\_force\_callback\ =\ callback}.
+
+\subsection{The virtual mouse spring}\label{the-virtual-mouse-spring}
+
+\[\boxed{\mathbf F_{mouse}=k_m(\mathbf x_{target}-\mathbf x_{node})-c_m\mathbf v_{node}}.\]
+
+The current 3D source contains:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{auto}\NormalTok{ applyMouseForce }\OperatorTok{=} \OperatorTok{[\&](}\NormalTok{PhysicsWorld}\OperatorTok{\&}\NormalTok{ physics}\OperatorTok{)} \OperatorTok{\{}
+    \ControlFlowTok{if} \OperatorTok{(!}\NormalTok{grabbedNode }\OperatorTok{||} \OperatorTok{*}\NormalTok{grabbedNode }\OperatorTok{\textgreater{}=}\NormalTok{ physics}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{.}\NormalTok{size}\OperatorTok{())} \ControlFlowTok{return}\OperatorTok{;}
+\NormalTok{    Node}\OperatorTok{\&}\NormalTok{ node }\OperatorTok{=}\NormalTok{ physics}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[*}\NormalTok{grabbedNode}\OperatorTok{];}
+    \ControlFlowTok{if} \OperatorTok{(}\NormalTok{node}\OperatorTok{.}\NormalTok{fixed}\OperatorTok{)} \ControlFlowTok{return}\OperatorTok{;}
+\NormalTok{    Vector3D force }\OperatorTok{=}\NormalTok{ mouseStiffness }\OperatorTok{*} \OperatorTok{(}\NormalTok{mouseTarget }\OperatorTok{{-}}\NormalTok{ node}\OperatorTok{.}\NormalTok{position}\OperatorTok{)}
+                   \OperatorTok{{-}}\NormalTok{ mouseDamping }\OperatorTok{*}\NormalTok{ node}\OperatorTok{.}\NormalTok{velocity}\OperatorTok{;}
+    \KeywordTok{constexpr} \DataTypeTok{float}\NormalTok{ maxMouseForce }\OperatorTok{=} \FloatTok{1500.0}\BuiltInTok{f}\OperatorTok{;}
+    \DataTypeTok{float}\NormalTok{ magnitude }\OperatorTok{=}\NormalTok{ glm}\OperatorTok{::}\NormalTok{length}\OperatorTok{(}\NormalTok{force}\OperatorTok{);}
+    \ControlFlowTok{if} \OperatorTok{(}\NormalTok{magnitude }\OperatorTok{\textgreater{}}\NormalTok{ maxMouseForce}\OperatorTok{)}
+\NormalTok{        force }\OperatorTok{*=}\NormalTok{ maxMouseForce }\OperatorTok{/}\NormalTok{ magnitude}\OperatorTok{;}
+\NormalTok{    node}\OperatorTok{.}\NormalTok{force }\OperatorTok{+=}\NormalTok{ force}\OperatorTok{;}
+\OperatorTok{\};}
+\end{Highlighting}
+\end{Shaded}
+
+This code \textbf{does not teleport a node}; it applies a bounded spring
+force, allowing the beam network to respond. \texttt{node.force\ +=}
+adds to rather than replaces gravity and other external forces.
+
+\subsection{Picking: from metres to
+pixels}\label{picking-from-metres-to-pixels}
+
+The original 2D picking selected the nearest node inside a fixed
+world-space radius (initially 0.2 m, later enlarged for diagnosis). This
+felt inconsistent as zoom changed.
+
+The current 3D renderer uses
+\texttt{glm::project(world.nodes{[}i{]}.position,\ viewMatrix(),\ projectionMatrix(),\ viewport)}
+to transform each node into framebuffer coordinates. It compares
+distance to the mouse cursor \textbf{in pixels} (19 px in the supplied
+v0.4 caller), so the selection radius is consistent with screen scale.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{auto}\NormalTok{ hoveredNode }\OperatorTok{=}\NormalTok{ renderer}\OperatorTok{.}\NormalTok{pickNode}\OperatorTok{(}\NormalTok{world}\OperatorTok{,} \FloatTok{19.0}\BuiltInTok{f}\OperatorTok{);}
+\ControlFlowTok{if} \OperatorTok{(}\NormalTok{left }\OperatorTok{\&\&} \OperatorTok{!}\NormalTok{previousLeft}\OperatorTok{)} \OperatorTok{\{}
+\NormalTok{    grabbedNode }\OperatorTok{=}\NormalTok{ hoveredNode}\OperatorTok{;}
+    \ControlFlowTok{if} \OperatorTok{(}\NormalTok{grabbedNode }\OperatorTok{\&\&}\NormalTok{ world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[*}\NormalTok{grabbedNode}\OperatorTok{].}\NormalTok{fixed}\OperatorTok{)}
+\NormalTok{        grabbedNode}\OperatorTok{.}\NormalTok{reset}\OperatorTok{();}
+    \ControlFlowTok{if} \OperatorTok{(}\NormalTok{grabbedNode}\OperatorTok{)}
+\NormalTok{        renderer}\OperatorTok{.}\NormalTok{beginDrag}\OperatorTok{(}\NormalTok{world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[*}\NormalTok{grabbedNode}\OperatorTok{].}\NormalTok{position}\OperatorTok{);}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{left\ \&\&\ !previousLeft} is an \textbf{edge detector}: act
+once when the button transitions from released to pressed. Without it,
+selection could restart every frame while held.
+
+\subsection{3D dragging is not a 2D screen
+coordinate}\label{d-dragging-is-not-a-2d-screen-coordinate}
+
+In 3D, the cursor represents a \textbf{ray} extending out from the
+camera. The program unprojects the near/far cursor points, forms a ray,
+then intersects it with a plane passing through the selected node and
+facing the camera:
+
+\[\mathbf r(t)=\mathbf o+t\mathbf d, \quad \mathbf n\cdot(\mathbf r(t)-\mathbf p_0)=0,\]
+
+\[\boxed{t=\frac{\mathbf n\cdot(\mathbf p_0-\mathbf o)}{\mathbf n\cdot\mathbf d}}.\]
+
+If the denominator is close to zero, the ray is parallel to the plane;
+return no target (\texttt{std::nullopt}). This gives intuitive movement
+approximately parallel to the screen at the node's initial depth. It
+does not implement arbitrary depth-axis gizmos yet.
+
+\subsection{UI feedback}\label{ui-feedback}
+
+\begin{itemize}
+\tightlist
+\item
+  Normal node: yellow; fixed node: purple.
+\item
+  Hovered: cyan; grabbed: orange.
+\item
+  A yellowish drag-spring line joins grabbed node and cursor target.
+\item
+  \texttt{Space}, \texttt{R}, \texttt{G} and later \texttt{F} toggle
+  pause, reset, gravity and the anchor; \texttt{Esc} exits.
+\end{itemize}
+
+\textbf{Debugging lesson:} seeing \texttt{Left\ mouse\ clicked}
+confirmed GLFW, but wasn't proof that node picking succeeded; only
+seeing selected IDs and applying forces confirmed the chain.
+
+Further reading: \href{https://www.glfw.org/docs/latest/input.html}{GLFW
+Input Guide}. See 03 - C++ for a Python Developer for lambdas and
+optional values.
+
+\newpage
+
+\section{From Square to 3D Cube and Orbit
+Camera}\label{from-square-to-3d-cube-and-orbit-camera}
+
+\subsection{The v0.4 geometry}\label{the-v0.4-geometry}
+
+The actual supplied v0.4 \texttt{main.cpp} creates \textbf{8 nodes},
+four at \(y=2\) m and four at \(y=3\) m, with \(x,z\in\{-0.5,+0.5\}\) m.
+Node 0 starts fixed. Gravity starts off, so the user can pull the
+structure without free fall; pressing \texttt{F} releases the anchor,
+and \texttt{G} enables gravity.
+
+The edges form a fully connected 8-node network, \(K_8\), with
+
+\[\binom{8}{2}=\frac{8\times7}{2}=28\text{ unique connections}.\]
+
+The source enumerates 12 cube edges, 12 face diagonals and 4 body
+diagonals. This is deliberately heavily braced; it is not a realistic
+vehicle-body finite element model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\AttributeTok{const} \BuiltInTok{std::}\NormalTok{array}\OperatorTok{\textless{}}\NormalTok{Vector3D}\OperatorTok{,} \DecValTok{8}\OperatorTok{\textgreater{}}\NormalTok{ positions}\OperatorTok{\{\{}
+    \OperatorTok{\{{-}}\FloatTok{0.5}\BuiltInTok{f}\OperatorTok{,} \FloatTok{2.0}\BuiltInTok{f}\OperatorTok{,} \OperatorTok{{-}}\FloatTok{0.5}\BuiltInTok{f}\OperatorTok{\},}
+    \OperatorTok{\{} \FloatTok{0.5}\BuiltInTok{f}\OperatorTok{,} \FloatTok{2.0}\BuiltInTok{f}\OperatorTok{,} \OperatorTok{{-}}\FloatTok{0.5}\BuiltInTok{f}\OperatorTok{\},}
+    \OperatorTok{\{} \FloatTok{0.5}\BuiltInTok{f}\OperatorTok{,} \FloatTok{2.0}\BuiltInTok{f}\OperatorTok{,}  \FloatTok{0.5}\BuiltInTok{f}\OperatorTok{\},}
+    \OperatorTok{\{{-}}\FloatTok{0.5}\BuiltInTok{f}\OperatorTok{,} \FloatTok{2.0}\BuiltInTok{f}\OperatorTok{,}  \FloatTok{0.5}\BuiltInTok{f}\OperatorTok{\},}
+    \OperatorTok{\{{-}}\FloatTok{0.5}\BuiltInTok{f}\OperatorTok{,} \FloatTok{3.0}\BuiltInTok{f}\OperatorTok{,} \OperatorTok{{-}}\FloatTok{0.5}\BuiltInTok{f}\OperatorTok{\},}
+    \OperatorTok{\{} \FloatTok{0.5}\BuiltInTok{f}\OperatorTok{,} \FloatTok{3.0}\BuiltInTok{f}\OperatorTok{,} \OperatorTok{{-}}\FloatTok{0.5}\BuiltInTok{f}\OperatorTok{\},}
+    \OperatorTok{\{} \FloatTok{0.5}\BuiltInTok{f}\OperatorTok{,} \FloatTok{3.0}\BuiltInTok{f}\OperatorTok{,}  \FloatTok{0.5}\BuiltInTok{f}\OperatorTok{\},}
+    \OperatorTok{\{{-}}\FloatTok{0.5}\BuiltInTok{f}\OperatorTok{,} \FloatTok{3.0}\BuiltInTok{f}\OperatorTok{,}  \FloatTok{0.5}\BuiltInTok{f}\OperatorTok{\}}
+\OperatorTok{\}\};}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{std::array\textless{}Vector3D,8\textgreater{}} has exactly eight
+GLM vectors. The \emph{two sets} of braces are common in
+\texttt{std::array} aggregate initialisation and should not be confused
+with a Python nested tuple of arbitrary size.
+
+\subsection{Orbit camera geometry}\label{orbit-camera-geometry}
+
+The camera stores a \textbf{target} (point to look at), a \textbf{yaw}
+(left/right rotation), a \textbf{pitch} (up/down rotation), and a
+\textbf{distance}. Given camera target \(\mathbf t\), distance \(r\),
+yaw \(\theta\) and pitch \(\phi\):
+
+\[\mathbf x_{camera}=\mathbf t+r\begin{bmatrix}
+\cos\phi\sin\theta\\
+\sin\phi\\
+\cos\phi\cos\theta
+\end{bmatrix}.\]
+
+The renderer calls
+\texttt{glm::lookAt(cameraPosition(),\ cameraTarget,\ \{0,1,0\})} to
+obtain a view matrix. Right-drag changes yaw/pitch, middle-drag
+translates the target, scrolling scales distance (clamped between 1.5
+and 40 in the supplied version).
+
+\subsection{From world coordinates to GPU
+pixels}\label{from-world-coordinates-to-gpu-pixels}
+
+A 3D point in homogeneous coordinates \(\mathbf p=(x,y,z,1)\) passes
+through
+
+\[\boxed{\mathbf p_{clip}=PVM\mathbf p_{model}}.\]
+
+Current app geometry is directly in world coordinates, so its model
+transform \(M\) is effectively identity and the code computes
+\texttt{mvp\ =\ projectionMatrix()\ *\ viewMatrix()}. The matrix product
+order matters: for column-vector convention, view acts first and
+projection acts second.
+
+The current projection is a perspective camera:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{glm}\OperatorTok{::}\NormalTok{perspective}\OperatorTok{(}\NormalTok{glm}\OperatorTok{::}\NormalTok{radians}\OperatorTok{(}\FloatTok{55.0}\BuiltInTok{f}\OperatorTok{),}\NormalTok{ aspect}\OperatorTok{,} \FloatTok{0.05}\BuiltInTok{f}\OperatorTok{,} \FloatTok{100.0}\BuiltInTok{f}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{55°} is vertical field of view;
+\texttt{aspect\ =\ framebufferWidth/framebufferHeight}; \texttt{0.05} m
+and \texttt{100} m set near/far clipping planes. Keeping the near plane
+above zero avoids an invalid perspective projection.
+
+\subsection{Screen-space picking and
+unprojection}\label{screen-space-picking-and-unprojection}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{glm::project}: world point → framebuffer X/Y/depth.
+\item
+  \texttt{glm::unProject}: framebuffer X/Y/depth → world point.
+\item
+  \texttt{cursorRay()}: two unprojected endpoints → a ray.
+\item
+  \texttt{beginDrag()}: record a point and a camera-facing plane normal.
+\item
+  \texttt{mouseDragTarget()}: ray/plane intersection.
+\end{itemize}
+
+This is \textbf{selection by projected point radius}, not mesh triangle
+ray-intersection. It is appropriate for a node-based prototype but would
+need occlusion, depth sorting and hit tests for complex visible
+geometry.
+
+\subsection{Scope of 3D collisions}\label{scope-of-3d-collisions}
+
+The existing solver checks node height versus a flat \(y=groundY\)
+plane. The renderer draws a \textbf{grid on the XZ plane}; the grid does
+not itself simulate collision. The simple ground solver handles point
+contacts, not edge/triangle collisions, contact patches, angular
+friction or full cube--cube intersection.
+
+See 13 - Modern OpenGL and GLSL and 18 - Limits and Future Roadmap.
+
+\newpage
+
+\section{Modern OpenGL, GPU Resources and
+GLSL}\label{modern-opengl-gpu-resources-and-glsl}
+
+\subsection{Why the OpenGL 3.3 change
+matters}\label{why-the-opengl-3.3-change-matters}
+
+OpenGL 2.1 compatibility mode allowed simple immediate-mode calls such
+as \texttt{glBegin}. OpenGL 3.3 \textbf{core} instead requires defining
+shaders and vertex input explicitly. The GPU draws the data you upload
+into buffers. The current v0.4 renderer in the supplied bundle uses
+\textbf{GLAD 2} to obtain function pointers and GLFW to
+create/context-manage the window.
+
+\subsection{Two shader stages}\label{two-shader-stages}
+
+Actual vertex-shader logic in the supplied source:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\PreprocessorTok{\#version 330 core}
+\KeywordTok{layout}\OperatorTok{(}\DataTypeTok{location} \OperatorTok{=} \DecValTok{0}\OperatorTok{)} \DataTypeTok{in} \DataTypeTok{vec3}\NormalTok{ aPosition}\OperatorTok{;}
+\KeywordTok{layout}\OperatorTok{(}\DataTypeTok{location} \OperatorTok{=} \DecValTok{1}\OperatorTok{)} \DataTypeTok{in} \DataTypeTok{vec3}\NormalTok{ aColour}\OperatorTok{;}
+\KeywordTok{uniform} \DataTypeTok{mat4}\NormalTok{ uMVP}\OperatorTok{;}
+\DataTypeTok{out} \DataTypeTok{vec3}\NormalTok{ vColour}\OperatorTok{;}
+\DataTypeTok{void} \FunctionTok{main}\OperatorTok{()} \OperatorTok{\{}
+    \BuiltInTok{gl\_Position} \OperatorTok{=}\NormalTok{ uMVP }\OperatorTok{*} \DataTypeTok{vec4}\OperatorTok{(}\NormalTok{aPosition}\OperatorTok{,} \FloatTok{1.0}\OperatorTok{);}
+\NormalTok{    vColour }\OperatorTok{=}\NormalTok{ aColour}\OperatorTok{;}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{layout(location\ =\ 0)} binds attribute index 0 to a 3-component
+vertex position. \texttt{uniform} means one matrix value used across the
+draw call; \texttt{out} passes interpolated data to the next shader
+stage. \texttt{vec4(aPosition,1.0)} adds homogeneous coordinate \(w=1\)
+so translations can be represented by a matrix multiplication.
+
+Actual fragment-shader logic:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\PreprocessorTok{\#version 330 core}
+\DataTypeTok{in} \DataTypeTok{vec3}\NormalTok{ vColour}\OperatorTok{;}
+\DataTypeTok{out} \DataTypeTok{vec4}\NormalTok{ FragColour}\OperatorTok{;}
+\KeywordTok{uniform} \DataTypeTok{bool}\NormalTok{ uRoundPoints}\OperatorTok{;}
+\DataTypeTok{void} \FunctionTok{main}\OperatorTok{()} \OperatorTok{\{}
+    \KeywordTok{if} \OperatorTok{(}\NormalTok{uRoundPoints}\OperatorTok{)} \OperatorTok{\{}
+        \DataTypeTok{vec2}\NormalTok{ p }\OperatorTok{=} \BuiltInTok{gl\_PointCoord} \OperatorTok{*} \FloatTok{2.0} \OperatorTok{{-}} \FloatTok{1.0}\OperatorTok{;}
+        \KeywordTok{if} \OperatorTok{(}\BuiltInTok{dot}\OperatorTok{(}\NormalTok{p}\OperatorTok{,}\NormalTok{ p}\OperatorTok{)} \OperatorTok{\textgreater{}} \FloatTok{1.0}\OperatorTok{)} \KeywordTok{discard}\OperatorTok{;}
+    \OperatorTok{\}}
+\NormalTok{    FragColour }\OperatorTok{=} \DataTypeTok{vec4}\OperatorTok{(}\NormalTok{vColour}\OperatorTok{,} \FloatTok{1.0}\OperatorTok{);}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+For points, \texttt{gl\_PointCoord} gives a coordinate across the point
+primitive. Pixels outside a unit circle are discarded, creating round
+point sprites. \texttt{vec4(...,1.0)} assigns fully opaque alpha.
+
+\subsection{Compile and link shaders}\label{compile-and-link-shaders}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{GLuint shader }\OperatorTok{=}\NormalTok{ glCreateShader}\OperatorTok{(}\NormalTok{type}\OperatorTok{);}
+\NormalTok{glShaderSource}\OperatorTok{(}\NormalTok{shader}\OperatorTok{,} \DecValTok{1}\OperatorTok{,} \OperatorTok{\&}\NormalTok{source}\OperatorTok{,} \KeywordTok{nullptr}\OperatorTok{);}
+\NormalTok{glCompileShader}\OperatorTok{(}\NormalTok{shader}\OperatorTok{);}
+\NormalTok{glGetShaderiv}\OperatorTok{(}\NormalTok{shader}\OperatorTok{,}\NormalTok{ GL\_COMPILE\_STATUS}\OperatorTok{,} \OperatorTok{\&}\NormalTok{ok}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+A shader \textbf{compiles} separately, then vertex and fragment shaders
+are \textbf{linked} into one shader program. The project checks
+compile/link status and throws an error containing the GPU driver's log
+on failure. This differs from compiling C++ files with \texttt{g++}:
+GLSL is compiled by the graphics driver at runtime.
+
+\subsection{The packed vertex layout}\label{the-packed-vertex-layout}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{struct}\NormalTok{ Vertex }\OperatorTok{\{}
+\NormalTok{    Vector3D position}\OperatorTok{;}
+\NormalTok{    Vector3D colour}\OperatorTok{;}
+\OperatorTok{\};}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{vao} (vertex array object) stores how vertex attributes are
+interpreted. \texttt{vbo} (vertex buffer object) owns the GPU-side byte
+buffer containing vertex data. The code declares the positions/colours
+to the GPU:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{glBindVertexArray}\OperatorTok{(}\NormalTok{vao}\OperatorTok{);}
+\NormalTok{glBindBuffer}\OperatorTok{(}\NormalTok{GL\_ARRAY\_BUFFER}\OperatorTok{,}\NormalTok{ vbo}\OperatorTok{);}
+\NormalTok{glVertexAttribPointer}\OperatorTok{(}\DecValTok{0}\OperatorTok{,} \DecValTok{3}\OperatorTok{,}\NormalTok{ GL\_FLOAT}\OperatorTok{,}\NormalTok{ GL\_FALSE}\OperatorTok{,}
+    \KeywordTok{sizeof}\OperatorTok{(}\NormalTok{Vertex}\OperatorTok{),} \KeywordTok{reinterpret\_cast}\OperatorTok{\textless{}}\DataTypeTok{void}\OperatorTok{*\textgreater{}(}\NormalTok{offsetof}\OperatorTok{(}\NormalTok{Vertex}\OperatorTok{,}\NormalTok{ position}\OperatorTok{)));}
+\NormalTok{glEnableVertexAttribArray}\OperatorTok{(}\DecValTok{0}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  First argument \texttt{0}: GLSL attribute location 0.
+\item
+  \texttt{3}: three scalar components per vertex.
+\item
+  \texttt{GL\_FLOAT}: underlying scalar data is \texttt{float}.
+\item
+  \texttt{GL\_FALSE}: don't normalise float values.
+\item
+  \texttt{sizeof(Vertex)}: stride, in bytes, between consecutive
+  vertices.
+\item
+  \texttt{offsetof(...)}: byte offset from start of structure to member.
+\item
+  \texttt{reinterpret\_cast\textless{}void*\textgreater{}}: expresses
+  the byte offset in the API's expected pointer-typed argument.
+\end{itemize}
+
+\textbf{Portability caveat:} for robust production code, ensure the
+\texttt{Vertex} layout matches the buffer attribute definition,
+including GLM alignment configuration. A future mesh format should
+consider explicit tightly packed fields or static layout assertions.
+
+\subsection{Per-frame rendering}\label{per-frame-rendering}
+
+The renderer assembles a dynamic
+\texttt{std::vector\textless{}Vertex\textgreater{}} for ground lines,
+active beams, broken beams, mouse spring and points. For each group, the
+local \texttt{drawVertices} lambda uploads current vertices:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{glBufferData}\OperatorTok{(}\NormalTok{GL\_ARRAY\_BUFFER}\OperatorTok{,}
+    \KeywordTok{static\_cast}\OperatorTok{\textless{}}\NormalTok{GLsizeiptr}\OperatorTok{\textgreater{}(}\NormalTok{vertices}\OperatorTok{.}\NormalTok{size}\OperatorTok{()} \OperatorTok{*} \KeywordTok{sizeof}\OperatorTok{(}\NormalTok{Vertex}\OperatorTok{)),}
+\NormalTok{    vertices}\OperatorTok{.}\NormalTok{data}\OperatorTok{(),}\NormalTok{ GL\_DYNAMIC\_DRAW}\OperatorTok{);}
+\NormalTok{glDrawArrays}\OperatorTok{(}\NormalTok{mode}\OperatorTok{,} \DecValTok{0}\OperatorTok{,} \KeywordTok{static\_cast}\OperatorTok{\textless{}}\NormalTok{GLsizei}\OperatorTok{\textgreater{}(}\NormalTok{vertices}\OperatorTok{.}\NormalTok{size}\OperatorTok{()));}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{vertices.data()} is a pointer to contiguous C++ vector memory.
+OpenGL copies data into the currently bound VBO. The
+\texttt{GL\_DYNAMIC\_DRAW} usage hint indicates the data is expected to
+change frequently. This is functional for 28 beams; at larger scales,
+batch allocations and persistent buffers may become more efficient.
+
+\subsection{Why OpenGL cleanup
+matters}\label{why-opengl-cleanup-matters}
+
+The renderer's destructor calls \texttt{glDeleteBuffers},
+\texttt{glDeleteVertexArrays}, \texttt{glDeleteProgram}, destroys the
+GLFW window, then terminates GLFW. It makes the context current before
+deleting GL resources. This is \textbf{RAII} in practice: graphics
+resources have a controlled lifetime, instead of relying on a Python GC
+finalizer.
+
+\subsection{Render order and depth}\label{render-order-and-depth}
+
+The ground grid is drawn with depth testing. Beams are depth-tested as
+lines. The source temporarily disables depth testing when drawing node
+points so they remain easy to locate. That \textbf{intentionally lets
+rear nodes remain visible through front geometry} for interaction and
+can lead to ambiguous selections: a useful debug feature but not a
+production occlusion policy.
+
+\subsection{Future graphics
+improvements}\label{future-graphics-improvements}
+
+Static grid VBO, more deliberate GPU buffer allocation, solid mesh
+skinning over the node cage, picking with depth, scalable vertex
+colours/strain gradients, cameras, optional ImGui inspector, and
+consistent frame pacing.
+
+Sources:
+\href{https://learnopengl.com/Getting-started/Hello-Triangle}{LearnOpenGL
+Hello Triangle},
+\href{https://learnopengl.com/Getting-started/Camera}{LearnOpenGL
+Camera}, \href{https://www.glfw.org/docs/latest/quick_guide.html}{GLFW
+quick guide}.
+
+\newpage
+
+\section{The GLEW Failure and GLAD 2
+Migration}\label{the-glew-failure-and-glad-2-migration}
+
+\subsection{What actually happened on 31 October
+2026}\label{what-actually-happened-on-31-october-2026}
+
+The user installed/upgraded packages using \texttt{pacman}. The first 3D
+renderer still used GLEW. A build of the existing sources succeeded, but
+running failed with:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{SoloPhysics error: Failed to initialise GLEW: Missing GL version}
+\end{Highlighting}
+\end{Shaded}
+
+A key debugging detail: a GLAD ZIP was referenced in instructions but
+\textbf{not actually present in \texttt{\textasciitilde{}/Downloads}}.
+The first \texttt{unzip} command failed, so running CMake in a folder
+named \texttt{build-glad} still built the GLEW code
+(\texttt{-\/-\ Found\ GLEW\ ...}). This was a \emph{patch-not-applied
+problem}, independent of the underlying graphics loader error.
+
+After the ZIP was downloaded/extracted and the project rebuilt, the user
+confirmed: \textbf{``it works now''}.
+
+\subsection{GLEW vs GLAD}\label{glew-vs-glad}
+
+Both are OpenGL function loaders. Modern OpenGL entry points are
+commonly retrieved at runtime from the active context, rather than being
+assumed statically exported by a system header/library. GLFW creates the
+window/context and provides \texttt{glfwGetProcAddress}. GLAD generates
+bindings for the requested API version. In this project, GLAD was
+selected to avoid the earlier GLEW initialization problem in the user's
+GLFW/Wayland setup.
+
+\begin{quote}
+\textbf{Note:} Root-cause precision The error alone does \textbf{not}
+prove Wayland/GLX was the sole technical cause. There was a suspected
+mismatch between GLEW's initialization path and the native context on
+that machine. The concrete verified facts are that GLEW failed, the old
+code persisted while the patch was absent, and the GLAD build worked
+after the patch was applied.
+\end{quote}
+
+\subsection{GLAD 2, not GLAD 1}\label{glad-2-not-glad-1}
+
+The v0.4 source uses:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\PreprocessorTok{\#include }\ImportTok{\textless{}glad/gl.h\textgreater{}}
+\PreprocessorTok{\#include }\ImportTok{\textless{}GLFW/glfw3.h\textgreater{}}
+
+\CommentTok{// Only after glfwMakeContextCurrent(window):}
+\AttributeTok{const} \DataTypeTok{int}\NormalTok{ loadedVersion }\OperatorTok{=}\NormalTok{ gladLoadGL}\OperatorTok{(}\NormalTok{glfwGetProcAddress}\OperatorTok{);}
+\ControlFlowTok{if} \OperatorTok{(}\NormalTok{loadedVersion }\OperatorTok{==} \DecValTok{0} \OperatorTok{||} \OperatorTok{!}\NormalTok{GLAD\_GL\_VERSION\_3\_3}\OperatorTok{)}
+    \ControlFlowTok{throw} \BuiltInTok{std::}\NormalTok{runtime\_error}\OperatorTok{(}\StringTok{"Failed to load OpenGL 3.3 functions with GLAD"}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{\textless{}glad/gl.h\textgreater{}} and \texttt{gladLoadGL(...)}
+are the GLAD 2 API used here; don't substitute
+\texttt{\textless{}glad/glad.h\textgreater{}} and
+\texttt{gladLoadGLLoader(...)} examples from GLAD 1.
+
+\textbf{Correct order}: initialize GLFW → choose 3.3 core hints → create
+window → make context current → load GLAD → compile shader → create
+VAO/VBO → draw. The context must exist and be current when GLAD obtains
+entry points.
+
+\subsection{Current CMake method}\label{current-cmake-method}
+
+The file in the supplied ZIP pins an upstream GLAD Git commit and uses
+\texttt{FetchContent}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{include}\NormalTok{(}\ImportTok{FetchContent}\NormalTok{)}
+\FunctionTok{FetchContent\_Declare}\NormalTok{(}
+\NormalTok{    glad}
+    \OtherTok{GIT\_REPOSITORY}\NormalTok{ https://github.com/Dav1dde/glad.git}
+    \OtherTok{GIT\_TAG}\NormalTok{ 658f48e72aee3c6582e80b05ac0f8787a64fe6bb}
+    \OtherTok{SOURCE\_SUBDIR}\NormalTok{ cmake}
+    \OtherTok{GIT\_SHALLOW} \OtherTok{FALSE}
+\NormalTok{)}
+\FunctionTok{FetchContent\_MakeAvailable}\NormalTok{(glad)}
+\FunctionTok{glad\_add\_library}\NormalTok{(glad\_gl\_core\_33 STATIC REPRODUCIBLE API gl:core=}\DataTypeTok{3.3}\NormalTok{ EXTENSIONS NONE)}
+\end{Highlighting}
+\end{Shaded}
+
+This runs a generator (requires Python/Jinja2) and creates a CMake
+library target \texttt{glad\_gl\_core\_33}. The pinned revision makes
+source selection repeatable; generated code and toolchains can still
+vary across environments. It downloads from GitHub on first configure
+unless cached.
+
+\subsection{Debug checklist}\label{debug-checklist}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Did the source actually change?}
+\FunctionTok{grep} \AttributeTok{{-}nE} \StringTok{\textquotesingle{}GLEW|glad|glfw\textquotesingle{}}\NormalTok{ CMakeLists.txt}
+\CommentTok{\# Is the new include present?}
+\FunctionTok{grep} \AttributeTok{{-}nE} \StringTok{\textquotesingle{}glew.h|glad/gl.h|gladLoadGL\textquotesingle{}}\NormalTok{ src/rendering/Renderer.cpp}
+\CommentTok{\# Configure cleanly in a NEW directory}
+\FunctionTok{cmake} \AttributeTok{{-}S}\NormalTok{ . }\AttributeTok{{-}B}\NormalTok{ build{-}glad }\AttributeTok{{-}G}\NormalTok{ Ninja}
+\FunctionTok{cmake} \AttributeTok{{-}{-}build}\NormalTok{ build{-}glad}
+\ExtensionTok{./build{-}glad/solo\_physics}
+\end{Highlighting}
+\end{Shaded}
+
+This case is a good lesson: \textbf{a new build directory does not
+change the source code or dependencies by itself}. Confirm patch
+extraction before debugging runtime loader behaviour.
+
+References: \href{https://github.com/Dav1dde/glad}{GLAD upstream
+repository},
+\href{https://github.com/Dav1dde/glad/blob/glad2/cmake/GladConfig.cmake}{GLAD
+CMake API},
+\href{https://www.glfw.org/docs/latest/quick_guide.html}{GLFW guide},
+\href{https://cmake.org/cmake/help/latest/module/FetchContent.html}{CMake
+FetchContent}.
+
+\newpage
+
+\section{Line-by-Line CMake and Linking
+Guide}\label{line-by-line-cmake-and-linking-guide}
+
+\subsection{\texorpdfstring{The actual supplied
+\texttt{CMakeLists.txt}}{The actual supplied CMakeLists.txt}}\label{the-actual-supplied-cmakelists.txt}
+
+The current reference file can be opened in
+\texttt{Source\ Snapshots/v0.4-GLAD/CMakeLists.txt}. Its key lines:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cmake\_minimum\_required}\NormalTok{(}\OtherTok{VERSION} \DataTypeTok{3.23}\NormalTok{)}
+\KeywordTok{project}\NormalTok{(SoloPhysics }\OtherTok{LANGUAGES} \OtherTok{C} \OtherTok{CXX}\NormalTok{)}
+\KeywordTok{set}\NormalTok{(}\DecValTok{CMAKE\_CXX\_STANDARD}\NormalTok{ 20)}
+\KeywordTok{set}\NormalTok{(}\DecValTok{CMAKE\_CXX\_STANDARD\_REQUIRED} \OtherTok{ON}\NormalTok{)}
+\KeywordTok{set}\NormalTok{(}\DecValTok{CMAKE\_CXX\_EXTENSIONS} \OtherTok{OFF}\NormalTok{)}
+\KeywordTok{find\_package}\NormalTok{(glm }\OtherTok{CONFIG} \OtherTok{REQUIRED}\NormalTok{)}
+\KeywordTok{find\_package}\NormalTok{(glfw3 }\OtherTok{CONFIG} \OtherTok{REQUIRED}\NormalTok{)}
+\KeywordTok{include}\NormalTok{(}\ImportTok{FetchContent}\NormalTok{)}
+\FunctionTok{FetchContent\_Declare}\NormalTok{(glad}
+    \OtherTok{GIT\_REPOSITORY}\NormalTok{ https://github.com/Dav1dde/glad.git}
+    \OtherTok{GIT\_TAG}\NormalTok{ 658f48e72aee3c6582e80b05ac0f8787a64fe6bb}
+    \OtherTok{SOURCE\_SUBDIR}\NormalTok{ cmake}
+    \OtherTok{GIT\_SHALLOW} \OtherTok{FALSE}
+\NormalTok{)}
+\FunctionTok{FetchContent\_MakeAvailable}\NormalTok{(glad)}
+\FunctionTok{glad\_add\_library}\NormalTok{(glad\_gl\_core\_33 STATIC REPRODUCIBLE API gl:core=}\DataTypeTok{3.3}\NormalTok{ EXTENSIONS NONE)}
+\KeywordTok{add\_executable}\NormalTok{(}\BaseNTok{solo\_physics}
+\NormalTok{    src/main.cpp}
+\NormalTok{    src/physics/PhysicsWorld.cpp}
+\NormalTok{    src/rendering/Renderer.cpp)}
+\KeywordTok{target\_include\_directories}\NormalTok{(}\BaseNTok{solo\_physics} \OtherTok{PRIVATE} \DecValTok{$\{CMAKE\_CURRENT\_SOURCE\_DIR\}}\NormalTok{/include)}
+\KeywordTok{target\_compile\_definitions}\NormalTok{(}\BaseNTok{solo\_physics} \OtherTok{PRIVATE}\NormalTok{ GLFW\_INCLUDE\_NONE)}
+\KeywordTok{target\_link\_libraries}\NormalTok{(}\BaseNTok{solo\_physics} \OtherTok{PRIVATE} \BaseNTok{glm::glm}\NormalTok{ glfw glad\_gl\_core\_33)}
+\KeywordTok{target\_compile\_options}\NormalTok{(}\BaseNTok{solo\_physics} \OtherTok{PRIVATE}\NormalTok{ {-}Wall {-}Wextra {-}Wpedantic)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Decode it one line at a
+time}\label{decode-it-one-line-at-a-time}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Command
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+What it does
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Python analogy
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{cmake\_minimum\_required(...)} & minimum CMake needed to
+understand this build & minimum tool version \\
+\texttt{project(...\ LANGUAGES\ C\ CXX)} & enable C and C++ compilation;
+GLAD generates C source & packaging metadata + compilers \\
+\texttt{CMAKE\_CXX\_STANDARD\ 20} & request C++20 & choosing
+syntax/runtime target \\
+\texttt{CMAKE\_CXX\_EXTENSIONS\ OFF} & prefer standard C++ over
+GNU-specific C++ language mode & strict portability configuration \\
+\texttt{find\_package(glm\ CONFIG\ REQUIRED)} & locate installed GLM
+CMake package target & resolve external dependency \\
+\texttt{find\_package(glfw3\ CONFIG\ REQUIRED)} & locate GLFW package
+and target & resolve external dependency \\
+\texttt{include(FetchContent)} & load built-in CMake dependency helper &
+import build script functionality \\
+\texttt{FetchContent\_Declare} & describe upstream Git source and
+revision & pin package source URL + commit \\
+\texttt{FetchContent\_MakeAvailable} & fetch/add dependency to configure
+& obtain/install build dependency \\
+\texttt{glad\_add\_library(...)} & generate GLAD bindings/library &
+generate compile-time bindings \\
+\texttt{add\_executable} & declare target and source files & define
+application build \\
+\texttt{target\_include\_directories} & where \texttt{\#include} looks
+for local headers & interpreter import search path analogy \\
+\texttt{target\_compile\_definitions} & define preprocessor flag &
+build-time configuration flag \\
+\texttt{target\_link\_libraries} & link the app to required libraries &
+native linking, not \texttt{import} \\
+\texttt{target\_compile\_options} & enable useful warnings &
+lint/checker options \\
+\end{longtable}
+
+\subsection{CMake language syntax is not
+C++}\label{cmake-language-syntax-is-not-c}
+
+\texttt{set(X\ 20)} has parentheses but is a CMake \emph{command}, not a
+C++ function. Values are usually \textbf{strings/arguments} in the CMake
+language; variable interpolation uses \texttt{\$\{VARIABLE\}}, not
+Python f-strings. \texttt{PRIVATE}/\texttt{PUBLIC}/\texttt{INTERFACE}
+determine whether usage requirements propagate to depending targets, not
+the C++ access modifiers inside a class.
+
+\subsection{Compile versus link
+errors}\label{compile-versus-link-errors}
+
+A missing \texttt{\#include} file is a
+\textbf{preprocessing/compilation} problem. A function declared but
+never compiled into any linked object can cause
+\texttt{undefined\ reference} at \textbf{link} time. Missing
+\texttt{glfw} or generated \texttt{glad\_gl\_core\_33} linkage is also a
+linking/configuration issue. Failure after the binary launches and
+prints a GLFW/GLEW/GLAD error is a \textbf{runtime} issue.
+
+\subsection{Rebuild best practices}\label{rebuild-best-practices}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Normal incremental build}
+\FunctionTok{cmake} \AttributeTok{{-}{-}build}\NormalTok{ build{-}glad}
+
+\CommentTok{\# Reconfigure when CMakeLists.txt changes}
+\FunctionTok{cmake} \AttributeTok{{-}S}\NormalTok{ . }\AttributeTok{{-}B}\NormalTok{ build{-}glad }\AttributeTok{{-}G}\NormalTok{ Ninja}
+
+\CommentTok{\# Prefer fresh independent directory to troubleshoot cache issues}
+\FunctionTok{cmake} \AttributeTok{{-}S}\NormalTok{ . }\AttributeTok{{-}B}\NormalTok{ build{-}test }\AttributeTok{{-}G}\NormalTok{ Ninja}
+\FunctionTok{cmake} \AttributeTok{{-}{-}build}\NormalTok{ build{-}test}
+\end{Highlighting}
+\end{Shaded}
+
+Do not indiscriminately delete a directory that might contain something
+you placed there manually. Generated build directories can generally be
+recreated; keep source code outside them.
+
+See
+\href{https://cmake.org/cmake/help/latest/module/FetchContent.html}{official
+CMake FetchContent documentation},
+\href{https://github.com/Dav1dde/glad/blob/glad2/cmake/GladConfig.cmake}{GLAD
+CMake definition}.
+
+\newpage
+
+\section{Real Errors, Diagnostics and
+Lessons}\label{real-errors-diagnostics-and-lessons}
+
+\subsection{Debugging timeline}\label{debugging-timeline}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Symptom
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Observed cause / diagnosis
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Fix
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+General lesson
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Changing damping seemed ineffective & A local \texttt{main.cpp} edit
+wasn't saved before build & Save, then rebuild; print config values &
+Verify inputs and build freshness \\
+Bottom nodes sat at ground with positive vertical velocity & Repeated
+tiny penetration plus restitution & Small-speed resting threshold &
+Contact impulses require persistent resting treatment \\
+Clicking seemed to do nothing & Small picking radius / unclear
+mouse-to-world state & Print cursor world coords; increase radius; show
+selected node & Inspect each link in input→selection→force chain \\
+Dragging not acting through physics & Node force assigned before
+\texttt{resetForces()} & Add callback inside step between reset and
+integration & Put state updates in correct stage \\
+Beams never turned orange/broke &
+\texttt{plasticDeformationEnabled=false}, \texttt{breakStrain=100}
+remained set & Enable plasticity, lower test thresholds, anchor a node &
+Verify actual configuration, not the intended one \\
+\texttt{i\ was\ not\ declared\ in\ this\ scope} &
+\texttt{world.nodes{[}i{]}} written outside
+\texttt{for(std::size\_t\ i...)} & Move fixed-node \texttt{continue}
+inside indexed loop & Scope is lexical; \texttt{continue} is
+loop-only \\
+Copying instructions into \texttt{Renderer.cpp} caused invalid C++ &
+Markdown explanatory text/code fences were pasted into \texttt{.cpp} &
+Replace file with clean source & Code blocks ≠ prose instructions \\
+\texttt{Failed\ to\ initialise\ GLEW:\ Missing\ GL\ version} & Runtime
+loader/context incompatibility suspected & Migrate loader to GLAD 2 &
+Distinguish loader from GPU/shader/physics \\
+CMake still said \texttt{Found\ GLEW} after naming build folder
+\texttt{build-glad} & Patch ZIP absent; \texttt{unzip} failed; source
+still used GLEW & Actually download/extract patch, verify \texttt{grep}
+results & Directory names do not change source \\
+\end{longtable}
+
+\subsection{Reproducible debugging
+funnel}\label{reproducible-debugging-funnel}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flowchart TD}
+\NormalTok{ A[Does it compile?] {-}{-}\textgreater{}|No| B[Read first compiler error]}
+\NormalTok{ A {-}{-}\textgreater{}|Yes| C[Does it link?]}
+\NormalTok{ C {-}{-}\textgreater{}|No| D[Check missing targets/source definitions]}
+\NormalTok{ C {-}{-}\textgreater{}|Yes| E[Does window/context initialise?]}
+\NormalTok{ E {-}{-}\textgreater{}|No| F[Check GLFW / loader / GPU versions]}
+\NormalTok{ E {-}{-}\textgreater{}|Yes| G[Are physics numbers valid?]}
+\NormalTok{ G {-}{-}\textgreater{}|No| H[Check dt, mass, forces, contact, strain]}
+\NormalTok{ G {-}{-}\textgreater{}|Yes| I[Do pixels match state?]}
+\NormalTok{ I {-}{-}\textgreater{}|No| J[Check shaders, VAO/VBO, matrices, depth]}
+\NormalTok{ I {-}{-}\textgreater{}|Yes| K[Test input and interactivity]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{\texorpdfstring{What \texttt{ninja:\ no\ work\ to\ do}
+actually
+means}{What ninja: no work to do actually means}}\label{what-ninja-no-work-to-do-actually-means}
+
+It means Ninja believes its declared inputs/outputs are up-to-date; it
+does \textbf{not} prove your program uses the source you \emph{intended}
+to copy. Verify path, file contents, CMake configure output and the
+executable invoked. Use
+\texttt{cmake\ -\/-build\ build-glad\ -\/-verbose} when necessary to
+inspect compiler/linker commands.
+
+\subsection{Warnings versus errors}\label{warnings-versus-errors}
+
+The v0.4 build log included
+\texttt{warning:\ variable\ \textquotesingle{}steps\textquotesingle{}\ set\ but\ not\ used}.
+Warnings typically do not stop compilation with the current options;
+they should still be addressed because they can reveal dead code or
+mistaken state handling. \texttt{-Wall\ -Wextra\ -Wpedantic} increases
+diagnostic visibility.
+
+\subsection{Useful SoloLinux commands}\label{useful-sololinux-commands}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{pwd}
+\FunctionTok{find}\NormalTok{ include src }\AttributeTok{{-}maxdepth}\NormalTok{ 3 }\AttributeTok{{-}type}\NormalTok{ f }\KeywordTok{|} \FunctionTok{sort}
+\ExtensionTok{rg} \AttributeTok{{-}n} \StringTok{\textquotesingle{}GLEW|glad|externalForceCallback|updateDamage\textquotesingle{}}\NormalTok{ include src CMakeLists.txt}
+\FunctionTok{cmake} \AttributeTok{{-}{-}build}\NormalTok{ build{-}glad }\AttributeTok{{-}{-}verbose}
+\ExtensionTok{./build{-}glad/solo\_physics}
+\FunctionTok{git}\NormalTok{ diff }\AttributeTok{{-}{-}stat}
+\FunctionTok{git}\NormalTok{ diff }\AttributeTok{{-}{-}}\NormalTok{ src/main.cpp}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{rg} is ripgrep; use regular \texttt{grep\ -R} if unavailable.
+The \texttt{git\ diff} commands inspect uncommitted changes.
+
+\subsection{The rule: measure before
+changing}\label{the-rule-measure-before-changing}
+
+When debugging a simulator, log meaningful invariants: node count, beam
+count, node mass, dt, position, velocity, force, rest length, strain,
+broken count and plastic-history count. \textbf{Change one variable at a
+time}. A powerful diagnostic order is: numerical state → force signs →
+picking → rendering. Never use just the visual cube as a correctness
+oracle.
+
+\newpage
+
+\section{Tests, Learning Exercises and Worked
+Answers}\label{tests-learning-exercises-and-worked-answers}
+
+\subsection{A. Regression test matrix}\label{a.-regression-test-matrix}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Test
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Setup
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Expected trend/criterion
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Gravity-only drop & unconnected 1 kg node, no ground impact &
+\(v_y\approx -9.81t\), \(y\approx y_0-\frac12gt^2\); discretisation
+causes small error \\
+Zero-force isolation & one node, gravity zero & position and velocity
+stay unchanged \\
+Equal/opposite beam loads & 2 free nodes linked by one stretched spring
+& internal forces sum to approximately zero \\
+Hanging spring equilibrium & anchor 3 m, rest 1 m, \(m=1\), \(k=100\) &
+settled height approximately \textbf{1.9019 m} \\
+Damping comparison & compare \(c=5\) versus \(c=0.6\) & smaller damping
+oscillates longer \\
+Square pre-impact & 4 nodes, equal masses, initial square & common
+downward acceleration before contact \\
+Resting ground & square after impact and settling & bottom \(y=0\), tiny
+\(v_y\) after correction \\
+Plasticity disabled & pull beam above \texttt{yieldStrain} & rest length
+stays unchanged, history flag false \\
+Plasticity enabled & pull above yield without breaking & rest length
+changes; history flag becomes true \\
+Fracture & pull past \texttt{breakStrain} & \texttt{broken=true}, no
+spring force in future steps \\
+GLAD startup & OpenGL 3.3 driver/context & logs a loaded version; shader
+program links \\
+3D picking & orbit around cube and click a node & selected node index
+remains valid \\
+\end{longtable}
+
+\subsection{B. Exercise 1 --- Translate Python to
+C++}\label{b.-exercise-1-translate-python-to-c}
+
+Python:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mass }\OperatorTok{=} \FloatTok{1.0}
+\NormalTok{position }\OperatorTok{=}\NormalTok{ [}\FloatTok{0.0}\NormalTok{, }\FloatTok{2.0}\NormalTok{, }\FloatTok{0.0}\NormalTok{]}
+\NormalTok{velocity }\OperatorTok{=}\NormalTok{ [}\FloatTok{0.0}\NormalTok{, }\FloatTok{0.0}\NormalTok{, }\FloatTok{0.0}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+Exercise: create a \texttt{Node} in C++ and set the same state.
+\textbf{Answer:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Node node}\OperatorTok{;}
+\NormalTok{node}\OperatorTok{.}\NormalTok{mass }\OperatorTok{=} \FloatTok{1.0}\BuiltInTok{f}\OperatorTok{;}
+\NormalTok{node}\OperatorTok{.}\NormalTok{position }\OperatorTok{=}\NormalTok{ Vector3D}\OperatorTok{\{}\FloatTok{0.0}\BuiltInTok{f}\OperatorTok{,} \FloatTok{2.0}\BuiltInTok{f}\OperatorTok{,} \FloatTok{0.0}\BuiltInTok{f}\OperatorTok{\};}
+\NormalTok{node}\OperatorTok{.}\NormalTok{velocity }\OperatorTok{=}\NormalTok{ Vector3D}\OperatorTok{\{}\FloatTok{0.0}\BuiltInTok{f}\OperatorTok{\};}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{C. Exercise 2 --- Calculate spring
+force}\label{c.-exercise-2-calculate-spring-force}
+
+A 1 m rest beam is 1.02 m long, \(k=650\) N/m, axial relative velocity
+0.1 m/s, \(c=12\) N·s/m. Find scalar force. \textbf{Answer:}
+
+\[F=650(0.02)+12(0.1)=13+1.2=14.2\,\mathrm N.\]
+
+This assumes \texttt{direction} points A→B and positive relative
+velocity means endpoints are separating.
+
+\subsection{D. Exercise 3 --- Interpret the
+lambda}\label{d.-exercise-3-interpret-the-lambda}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{auto}\NormalTok{ fn }\OperatorTok{=} \OperatorTok{[\&](}\NormalTok{PhysicsWorld}\OperatorTok{\&}\NormalTok{ world}\OperatorTok{)} \OperatorTok{\{}
+    \ControlFlowTok{if} \OperatorTok{(!}\NormalTok{grabbedNode}\OperatorTok{)} \ControlFlowTok{return}\OperatorTok{;}
+\NormalTok{    world}\OperatorTok{.}\NormalTok{nodes}\OperatorTok{[*}\NormalTok{grabbedNode}\OperatorTok{].}\NormalTok{force }\OperatorTok{+=}\NormalTok{ Vector3D}\OperatorTok{\{}\DecValTok{1}\OperatorTok{,} \DecValTok{0}\OperatorTok{,} \DecValTok{0}\OperatorTok{\};}
+\OperatorTok{\};}
+\end{Highlighting}
+\end{Shaded}
+
+Explain why the compiler allows access to \texttt{grabbedNode} even
+though it is not a parameter. \textbf{Answer:} \texttt{{[}\&{]}}
+captures used enclosing local variables by reference; \texttt{fn} can
+read the latest \texttt{grabbedNode}, assuming its lifetime remains
+valid. \texttt{std::optional} presence is tested before dereferencing.
+
+\subsection{E. Exercise 4 --- Derive static
+equilibrium}\label{e.-exercise-4-derive-static-equilibrium}
+
+Change the hanging-mass spring to \(k=200\) N/m, \(m=1\) kg, same
+anchor/rest length. Predict position. \textbf{Answer:} extension
+\(mg/k=0.04905\) m, so
+
+\[y_{eq}=3-(1+0.04905)=1.95095\,\mathrm m.\]
+
+\subsection{F. Exercise 5 --- Why 28
+beams?}\label{f.-exercise-5-why-28-beams}
+
+For eight distinct nodes, an edge between every unordered pair creates
+\(8\times7/2=28\) beams. This is the complete graph \(K_8\). Not all 28
+are necessary for a rigid braced cube; the current topology is a simple
+heavily reinforced learning structure.
+
+\subsection{G. Exercise 6 --- Debug a missing
+force}\label{g.-exercise-6-debug-a-missing-force}
+
+You add \texttt{world.nodes{[}3{]}.force\ +=\ F;} just before calling
+\texttt{world.step(dt)}, but the node doesn't respond. Where does it go
+wrong? \textbf{Answer:} \texttt{resetForces()} zeros it inside the
+timestep; supply it via \texttt{externalForceCallback} (or a formal
+persistent external-force input system) before beam
+solution/integration.
+
+\subsection{H. Exercise 7 --- Change OpenGL
+safely}\label{h.-exercise-7-change-opengl-safely}
+
+Explain why these lines must be ordered:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{glfwMakeContextCurrent}\OperatorTok{(}\NormalTok{window}\OperatorTok{);}
+\DataTypeTok{int}\NormalTok{ loadedVersion }\OperatorTok{=}\NormalTok{ gladLoadGL}\OperatorTok{(}\NormalTok{glfwGetProcAddress}\OperatorTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Answer:} OpenGL entry-point lookup depends on a current context.
+Trying to load before binding a context may fail, even if the compiler
+and linker are happy.
+
+\subsection{I. Suggested exercise
+roadmap}\label{i.-suggested-exercise-roadmap}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Write a tiny C++ test executable that compiles only
+  \texttt{PhysicsWorld.cpp} plus tests; no renderer.
+\item
+  Compare analytical and simulated oscillator periods over multiple
+  timesteps.
+\item
+  Record total energy (kinetic + spring + gravitational) with no
+  damping/ground and explain integration drift.
+\item
+  Visualise active-beam strain as a continuous gradient while keeping
+  plastic history a distinct overlay.
+\item
+  Expose material parameters in a configuration file rather than
+  hardcoding each scenario.
+\item
+  Add mouse-input replay so regression tests don't depend on how quickly
+  you move the mouse.
+\end{enumerate}
+
+Each task depends on concepts already encountered in the project; keep a
+lab note recording hypothesis, method, result and discrepancies.
+
+\newpage
+
+\section{Current Limits and a Path Toward Vehicle
+Simulation}\label{current-limits-and-a-path-toward-vehicle-simulation}
+
+\subsection{Present capabilities (confirmed by
+source/conversation)}\label{present-capabilities-confirmed-by-sourceconversation}
+
+\begin{itemize}
+\tightlist
+\item
+  3D point-mass nodes and axial spring--damper beams.
+\item
+  External gravity; fixed anchor nodes.
+\item
+  Semi-implicit Euler, fixed-step application loop.
+\item
+  Simplified flat-ground node contact and restitution.
+\item
+  Yield-triggered rest-length change, broken-beam flags.
+\item
+  OpenGL 3.3 line/point rendering, orbit/pan/zoom, screen-space picking
+  and mouse spring dragging.
+\item
+  Native GLFW context with GLAD 2; confirmed launched successfully after
+  migration.
+\end{itemize}
+
+\subsection{Not yet established}\label{not-yet-established}
+
+A working 3D cube display is \textbf{not} the same as validated
+soft-body vehicle dynamics. Current limitations include: simplistic
+contact, no self-collision, no continuous collision detection, no proper
+constraints solver, no beam bending/buckling/torsion, no traction or
+suspension/wheels, no vehicle drivetrain, no contact patches, no
+material calibration, no deformable surface meshes, no broad-phase
+spatial partitioning, no replay-determinism guarantee, and no numerical
+performance benchmarks for thousands of beams.
+
+\subsection{Suggested engineering
+order}\label{suggested-engineering-order}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Phase
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Priority
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Why
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & Unit/regression testing & Guard physics correctness while changing
+architecture \\
+2 & Separate simulation library, scenario tests, UI & Easier to
+maintain/test than one large \texttt{main.cpp} \\
+3 & More robust ground contact and friction & Avoid velocity clamping
+artefacts \\
+4 & Better strain/damage history & Separate elastic/plastic/total
+strain; test energy and break criteria \\
+5 & Collision geometry and broad phase & Objects can actually crash into
+each other \\
+6 & Vehicle chassis + basic suspension & First vehicle-like dynamics \\
+7 & Surface mesh attached to node cage & Visible deformation beyond line
+segments \\
+8 & Constraint solvers, possibly XPBD & Address stiffness/time-step
+coupling and robust contacts \\
+9 & Profiling and scalability & Support realistic node/beam counts \\
+\end{longtable}
+
+An eventual switch to \textbf{XPBD} or another constraint approach is a
+research direction, not an assertion that the current spring formulation
+is wrong. XPBD specifically targets problems of stiffness depending on
+timestep/solver iteration count; see Macklin et al.,
+\href{https://mmacklin.com/xpbd.pdf}{XPBD paper}.
+
+\subsection{Research questions to answer
+experimentally}\label{research-questions-to-answer-experimentally}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  How large can \texttt{stiffness} become at 240 Hz before noticeable
+  instability?
+\item
+  How does the restitution threshold change the energy budget?
+\item
+  Is fracture triggered by instantaneous strain, accumulated history,
+  stress, or energy release?
+\item
+  Does the rendering pick the nearest \emph{visible} node, or just
+  nearest in screen-space among all nodes?
+\item
+  How many nodes and beams can be simulated at 240 Hz on the target
+  hardware?
+\item
+  How will a vehicle's tyres/suspension interact with the same contact
+  system?
+\end{enumerate}
+
+\subsection{Source discipline}\label{source-discipline}
+
+Official BeamNG descriptions are a \textbf{conceptual inspiration} for
+node--beam simulation, but the SoloPhysics code remains its own
+simplified educational implementation. Do not infer BeamNG internals
+from matching terms or copy parameter units without verification.
+
+\newpage
+
+\section{Websites, Sources and
+Attribution}\label{websites-sources-and-attribution}
+
+\subsection{Provenance statement ---
+important}\label{provenance-statement-important}
+
+This bibliography has \textbf{two distinct classes of evidence}:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Project/author evidence (P):} user-supplied code, build logs,
+  outputs, and conversation milestones. Those sources establish what
+  SoloPhysics \emph{actually did}.
+\item
+  \textbf{External learning/reference (R):} authoritative websites
+  checked while preparing this documentation (31 Oct 2026) or explicitly
+  recommended/discussed during development. These explain third-party
+  APIs and algorithms but are \textbf{not proof} that every page was
+  personally consulted at the moment the original code was authored. The
+  earlier assistant did not preserve an exhaustive browser-history
+  ledger; therefore \textbf{an exhaustive list of every website
+  previously visited cannot honestly be certified}.
+\end{itemize}
+
+This distinction avoids retroactively claiming websites were used when
+the evidence only shows they are relevant/recommended.
+
+\subsection{Direct project evidence}\label{direct-project-evidence}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+ID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Evidence
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Use
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+P1 & Conversations and recorded milestone notes, 28--31 Oct 2026 &
+Design decisions, progression, suspended-mass and square-drop
+measurements \\
+P2 & User's pasted \texttt{main.cpp} and \texttt{Renderer.cpp} excerpts
+from 2D iterations & Actual C++ syntax, callbacks and earlier
+debugging \\
+P3 & CLI outputs for hanging mass, square drop, and improved contact &
+Numerical results (\(1.9019\) m and resting square) \\
+P4 & User's build logs, 31 Oct 2026: missing patch ZIP, GLEW failure &
+Loader transition diagnosis \\
+P5 & \texttt{SoloPhysics-v0.4-GLAD-upgrade.zip} bundle available in the
+conversation & Verified v0.4 \texttt{CMakeLists.txt}, \texttt{main.cpp},
+\texttt{Renderer.hpp}, \texttt{Renderer.cpp} \\
+P6 & User statement, 31 Oct 2026, ``it works now'' & GLAD renderer runs
+on user's machine \\
+\end{longtable}
+
+\textbf{Source completeness limit:} the current live repository and its
+newest local \texttt{PhysicsWorld.cpp} were not read in their entirety
+for this handbook. Source snapshots are the supplied GLAD upgrade
+bundle, not a Git clone of the user's project.
+
+\subsection{Official documentation and educational
+sources}\label{official-documentation-and-educational-sources}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+ID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Website / precise URL
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Why it matters
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Status
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+R1 & \href{https://www.beamng.com/game/about/physics/}{BeamNG: Soft-body
+Physics} & Nodes, massless beams, axial constraints,
+deformation/breaking & verified reference; conceptual inspiration \\
+R2 & \href{https://docs.beamng.com/modding/vehicle/intro_jbeam/}{BeamNG:
+Introduction to JBeam} & Structure, node/beam modelling, orientation &
+verified reference \\
+R3 & \href{https://www.glfw.org/docs/latest/quick_guide.html}{GLFW
+Getting Started} & Window/context creation, rendering loop, GLAD loader
+ordering & verified reference \\
+R4 & \href{https://www.glfw.org/docs/latest/input.html}{GLFW Input
+Guide} & Mouse/key polling, callbacks and window user pointers &
+verified reference \\
+R5 & \href{https://github.com/Dav1dde/glad}{GLAD upstream repository} &
+Generator and GLAD 2 function loading & verified reference; exact
+repository pinned by project \\
+R6 &
+\href{https://github.com/Dav1dde/glad/blob/glad2/cmake/GladConfig.cmake}{GLAD
+CMake library definition} &
+\texttt{glad\_add\_library(...\ API\ gl:core=3.3)} & verified
+reference \\
+R7 &
+\href{https://cmake.org/cmake/help/latest/module/FetchContent.html}{CMake
+FetchContent} & Fetch/build upstream dependency & verified reference \\
+R8 & \href{https://github.com/g-truc/glm/blob/master/manual.md}{GLM
+Manual} & \texttt{glm::vec3}, \texttt{glm::lookAt},
+\texttt{glm::perspective}, \texttt{glm::project/unProject} & verified
+reference \\
+R9 &
+\href{https://learnopengl.com/Getting-started/Hello-Triangle}{LearnOpenGL:
+Hello Triangle} & VBO, VAO, shaders and draw calls & verified
+educational reading \\
+R10 & \href{https://learnopengl.com/Getting-started/Camera}{LearnOpenGL:
+Camera} & View matrices and camera motion & verified educational
+reading \\
+R11 & \href{https://gafferongames.com/post/fix_your_timestep/}{Gaffer on
+Games: Fix Your Timestep!} & Fixed-step accumulator rationale & verified
+educational reading \\
+R12 &
+\href{https://en.cppreference.com/cpp/utility/optional}{cppreference:
+std::optional} & Value-or-no-value state for selection/drag & verified
+C++ reference \\
+R13 &
+\href{https://en.cppreference.com/cpp/utility/functional/function}{cppreference:
+std::function} & Stored external force callback & verified C++
+reference \\
+R14 &
+\href{https://www.learncpp.com/cpp-tutorial/introduction-to-lambdas-anonymous-functions/}{LearnCpp:
+Introduction to lambdas} & Captures, anonymous callable objects &
+verified learning reference \\
+R15 & \href{https://mmacklin.com/xpbd.pdf}{Macklin, Müller and
+Chentanez: XPBD (2016)} & Future constraint-solver research; not current
+algorithm & verified primary paper \\
+\end{longtable}
+
+All external links were checked or retrieved during this documentation
+pass on \textbf{31 October 2026}. The exact content of external pages
+may change later. For authoritative specifications, prefer upstream
+docs; for tutorials, compare explanations against upstream APIs and
+compiler output.
+
+\subsection{Licence/attribution
+awareness}\label{licenceattribution-awareness}
+
+SoloPhysics uses third-party libraries. GLM, GLFW, GLAD, OpenGL and
+CMake are distinct projects with their own documentation, licensing and
+APIs. This handbook paraphrases their concepts and contains small
+original instructional examples and user-project excerpts. It does
+\textbf{not} reproduce substantial portions of external tutorials or
+articles.
+
+\subsection{Sources mentioned in original planning but not
+implemented}\label{sources-mentioned-in-original-planning-but-not-implemented}
+
+Early planning discussed position-based dynamics (PBD/XPBD) as a
+possible future strategy. It is not the solver currently in SoloPhysics.
+BeamNG references describe conceptual inspiration but the project has no
+claim of implementing the complete BeamNG algorithm.
+
+\newpage
+
+\section{C++ Syntax Cheat Sheet for Python
+Programmers}\label{c-syntax-cheat-sheet-for-python-programmers}
+
+\subsection{\texorpdfstring{Read this before opening
+\texttt{Renderer.cpp}}{Read this before opening Renderer.cpp}}\label{read-this-before-opening-renderer.cpp}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+C++ notation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Plain English
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Python rough analogy
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{\#include\ \textless{}file\textgreater{}} & make declarations
+from header available & \texttt{import} (compile-time, not runtime) \\
+\texttt{\#pragma\ once} & don't include same header twice in translation
+unit & no direct equivalent \\
+\texttt{namespace\ solophysics} & scope for project symbols &
+module/namespace \\
+\texttt{::} & qualify a scope & \texttt{module.name} \\
+\texttt{.member} & member of a value/reference & \texttt{obj.attr} \\
+\texttt{ptr-\textgreater{}member} & member through a pointer &
+\texttt{obj.attr} after pointer dereference \\
+\texttt{\&} after a type & reference / alias & implicit object
+reference, not identical \\
+\texttt{\&x} expression & take address of x & no everyday equivalent \\
+\texttt{*ptr} expression & dereference pointer & no everyday
+equivalent \\
+\texttt{*opt} & retrieve contained optional value & unwrap
+\texttt{Optional} \\
+\texttt{const\ T\&} & read-only borrowed alias & immutable-access view
+analogy \\
+\texttt{T\&\&} & rvalue reference & advanced, not yet needed \\
+\texttt{auto} & compiler infers a concrete type & inferred typing, but
+static \\
+\texttt{constexpr} & compile-time value when possible & \texttt{Final}
+isn't exact equivalent \\
+\texttt{std::vector\textless{}T\textgreater{}} & dynamically sized
+contiguous sequence & \texttt{list{[}T{]}} \\
+\texttt{std::array\textless{}T,N\textgreater{}} & fixed-size array &
+fixed-length tuple analogy \\
+\texttt{std::size\_t} & unsigned size/index type & \texttt{int} for
+indices \\
+\texttt{std::optional\textless{}T\textgreater{}} & maybe T; maybe no
+value & \texttt{T\ \textbar{}\ None} \\
+\texttt{std::function\textless{}R(Args...)\textgreater{}} & stored
+callable with signature & \texttt{Callable{[}{[}Args{]},\ R{]}} \\
+\texttt{{[}{]}(...)\ \{...\}} & lambda, no captures & \texttt{lambda}
+(but C++ allows block body) \\
+\texttt{{[}\&{]}(...)\ \{...\}} & lambda captures used locals by
+reference & closure captures variable bindings \\
+\texttt{{[}={]}(...)\ \{...\}} & lambda captures used locals by value &
+closure capture snapshot analogy \\
+\texttt{{[}this{]}} & capture current object pointer & bound method
+analogy \\
+\texttt{for\ (auto\&\ x\ :\ xs)} & iterate by reference &
+\texttt{for\ x\ in\ xs:} \\
+\texttt{for\ (i=0;\ i\textless{}n;\ ++i)} & index loop &
+\texttt{for\ i\ in\ range(n):} \\
+\texttt{if\ (!flag)} & if not true & \texttt{if\ not\ flag:} \\
+\texttt{\&\&}, \texttt{\textbar{}\textbar{}} & logical AND, OR &
+\texttt{and}, \texttt{or} \\
+\texttt{true}, \texttt{false} & boolean values & \texttt{True},
+\texttt{False} \\
+\texttt{nullptr} & null pointer & \texttt{None} (not the same type) \\
+\texttt{\{0,1,2\}} & aggregate/brace initialisation & list/tuple literal
+analogy \\
+\texttt{std::cout\ \textless{}\textless{}\ x} & write stdout &
+\texttt{print(x)} \\
+\texttt{std::cerr\ \textless{}\textless{}\ x} & write stderr &
+\texttt{print(x,\ file=sys.stderr)} \\
+\texttt{throw} / \texttt{catch} & exception handling & \texttt{raise} /
+\texttt{except} \\
+\texttt{static\_cast\textless{}T\textgreater{}(x)} & explicit conversion
+& \texttt{T(x)} (not exact) \\
+\texttt{sizeof(T)} & number of bytes for C++ object type &
+\texttt{struct.calcsize} analogy \\
+\texttt{offsetof(T,member)} & member byte offset & C ABI \texttt{ctypes}
+analogy \\
+\texttt{R"TAG(...)TAG"} & raw string literal & \texttt{r"..."} but with
+delimiter \\
+\texttt{\textasciitilde{}Renderer()} & destructor & \texttt{\_\_del\_\_}
+analogy, but timing differs \\
+\texttt{=\ delete} & disable a function/operation & no direct
+equivalent \\
+\end{longtable}
+
+\subsection{Special vector syntax}\label{special-vector-syntax}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{using}\NormalTok{ Vector3D }\OperatorTok{=}\NormalTok{ glm}\OperatorTok{::}\NormalTok{vec3}\OperatorTok{;}
+\NormalTok{Vector3D p}\OperatorTok{\{}\FloatTok{1.0}\BuiltInTok{f}\OperatorTok{,} \FloatTok{2.0}\BuiltInTok{f}\OperatorTok{,} \FloatTok{3.0}\BuiltInTok{f}\OperatorTok{\};}
+\NormalTok{Vector3D v}\OperatorTok{\{}\FloatTok{0.0}\BuiltInTok{f}\OperatorTok{\};}
+\NormalTok{Vector3D moved }\OperatorTok{=}\NormalTok{ p }\OperatorTok{+}\NormalTok{ v }\OperatorTok{*} \FloatTok{0.1}\BuiltInTok{f}\OperatorTok{;}
+\DataTypeTok{float}\NormalTok{ distance }\OperatorTok{=}\NormalTok{ glm}\OperatorTok{::}\NormalTok{length}\OperatorTok{(}\NormalTok{moved }\OperatorTok{{-}}\NormalTok{ p}\OperatorTok{);}
+\DataTypeTok{float}\NormalTok{ alignedSpeed }\OperatorTok{=}\NormalTok{ glm}\OperatorTok{::}\NormalTok{dot}\OperatorTok{(}\NormalTok{v}\OperatorTok{,}\NormalTok{ glm}\OperatorTok{::}\NormalTok{normalize}\OperatorTok{(}\NormalTok{p}\OperatorTok{));}
+\end{Highlighting}
+\end{Shaded}
+
+These operations are built by GLM's overloaded operators, analogous to
+NumPy array arithmetic---not automatic features of built-in C arrays.
+
+\subsection{Common traps}\label{common-traps}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{=} assigns; \texttt{==} compares.
+\item
+  \texttt{\&} is reference in a declaration but address-of in many
+  expressions.
+\item
+  \texttt{*} multiplies numbers and dereferences pointers/optional
+  values depending on context.
+\item
+  \texttt{{[}{]}} is indexing for a container and capture syntax for a
+  lambda.
+\item
+  \texttt{std::vector} references can be invalidated by reallocation.
+\item
+  \texttt{float} and \texttt{double} are not Python's single ordinary
+  float type; literals ending in \texttt{f} are \texttt{float}.
+\item
+  Always check the \emph{first} compiler error before the cascade that
+  follows.
+\end{itemize}
+
+\subsection{Further reading}\label{further-reading}
+
+03 - C++ for a Python Developer • 04 - Data Model and Source
+Architecture • 13 - Modern OpenGL and GLSL •
+\href{https://www.learncpp.com/}{LearnCpp} •
+\href{https://en.cppreference.com/}{cppreference}
+
+\newpage
+
+\end{document}

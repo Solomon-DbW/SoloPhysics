@@ -1,0 +1,16 @@
+\usepackage{fancyhdr}
+\usepackage{fvextra}
+\usepackage{xcolor}
+\usepackage{microtype}
+\definecolor{soloblue}{HTML}{256897}
+\definecolor{solodark}{HTML}{24374A}
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\color{soloblue}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\large\bfseries\color{solodark}}{\thesubsection}{0.7em}{}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{soloblue}{SoloPhysics | Technical Development Handbook}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\AtBeginDocument{\renewcommand{\arraystretch}{1.16}}
